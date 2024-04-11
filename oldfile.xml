@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<himchistka>
+	<client code="1" surname="Иванов" name="Иван" secname="Иванович" regular="1"/>
+	<client code="2" surname="Смирнов" name="Артем" secname="Артемович" regular="0"/>
+	<client code="3" surname="Петров" name="Петр" secname="Петрович" regular="1"/>
+
+	<kindService code="1" name="Химчистка костюма" typeservice="Чистка текстильных изделий" price="1000"/>
+	<kindService code="2" name="Химчистка матраса" typeservice="Чистка мягкой мебели" price="1500"/>
+	<kindService code="3" name="Химчистка коврового покрытия" typeservice="Чистка предметов интерьера" price="900"/>
+
+	<service code = "1" kindService = '1' count = "2" dateReception="10.03.2022" dateReturn="18.03.2022" client='1'/>
+	<service code = "2" kindService = '2' count = "1" dateReception="23.03.2022" dateReturn="30.03.2022" client='2'/>
+	<service code = "3" kindService = '3' count = "1" dateReception="14.04.2022" dateReturn="21.04.2022" client='3'/>
+</himchistka>
