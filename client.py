@@ -13,6 +13,6 @@ class Client(General):
     is_regular: bool = False
 
     @property
-    def get_description(self):
-        """Get Client instance string description"""
+    def description(self):
+        """Client instance string description"""
         return f"{self.surname} {self.name} {self.second_name}"

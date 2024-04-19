@@ -16,78 +16,26 @@ class Service(General):
     reception_date: date = None
     return_date: date = None
 
+    @property
+    def price(self):
+        """Service price"""
+        return (
+            self.service_kind.price if self.service_kind else ServiceKind.default_price
+        )
 
-# def __init__(
-#     self,
-#     code=0,
-#     kindService=None,
-#     count=1,
-#     client=None,
-#     dateReception=None,
-#     dateReturn=None,
-# ):
-#     general.__init__(self, code)
-#     self.setClient(client)
-#     self.setKindService(kindService)
-#     self.setCount(count)
-#     self.setDateReception(dateReception)
-#     self.setDateReturn(dateReturn)
-#     self.calculate()
+    @property
+    def sum(self):
+        """Service orders sum with discount applied"""
+        if self.client is None or self.service_kind is None:
+            return 0
+        discount = 0.03 if self.client.is_regular else 0
+        return self.count * self.price * (1 - discount)
 
-# def getKindService(self):
-#     return self.__kindService
-
-# def getClient(self):
-#     return self.__client
-
-# def getDateReception(self):
-#     return self.__dateReception
-
-# def getDateReturn(self):
-#     return self.__dateReturn
-
-# def getPrice(self):
-#     return self.__kindService.getPrice()
-
-# def getCount(self):
-#     return self.__count
-
-# def getSum(self):
-#     return self.__sum
-
-# def setKindService(self, value):
-#     if isinstance(value, kindService):
-#         self.__kindService = value
-
-# def setClient(self, value):
-#     if isinstance(value, client):
-#         self.__client = value
-
-# def setDateReception(self, value):
-#     self.__dateReception = value
-
-# def setDateReturn(self, value):
-#     self.__dateReturn = bool(value)
-
-# def setCount(self, value):
-#     self.__count = value
-
-# def setSum(self, value):
-#     self.__sum = value
-
-# def calculate(self):
-#     discount = 0
-#     if self.__client.getRegular() == True:
-#         discount = 0.03
-#     self.__sum = self.__count * self.__kindService.getPrice() * (1 - discount)
-
-# def getDecription(self):
-#     s = ""
-#     s = "%s %s %s %s %s" % (
-#         self.getClient().getDecription(),
-#         self.getKindService().getName(),
-#         self.getPrice(),
-#         self.getCount(),
-#         self.getSum(),
-#     )
-#     return s
+    @property
+    def description(self):
+        """Service instance string description"""
+        return (
+            f"{self.client.description} "
+            f"{self.service_kind.name} "
+            f"{self.price} {self.count} {self.sum}"
+        )
