@@ -16,3 +16,13 @@ class Client(General):
     def description(self):
         """Client instance string description"""
         return f"{self.surname} {self.name} {self.second_name}"
+
+    def __eq__(self, other):
+        if not isinstance(other, Client):
+            return NotImplemented
+
+        return (
+            self.name == other.name
+            and self.surname == other.surname
+            and self.second_name == other.second_name
+        )

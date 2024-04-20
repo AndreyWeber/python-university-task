@@ -4,13 +4,16 @@ from dataclasses import dataclass
 
 @dataclass(slots=True)
 class General:
-    """Base class for all other classes in the project"""
+    """Base class for all other entity classes in the project"""
 
     code: int = 0
 
 
+#
+# More traditional way of Pyhton class implementation
+#
 # class General:
-#     """Base class"""
+#     """Base class for all other entity classes in the project"""
 
 #     def __init__(self, code=0):
 #         self.code = code

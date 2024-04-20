@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from dataclasses import dataclass
-from datetime import date
+from datetime import datetime
 from general import General
 from serviceKind import ServiceKind
 from client import Client
@@ -13,8 +13,8 @@ class Service(General):
     client: Client = None
     service_kind: ServiceKind = None
     count: int = 1
-    reception_date: date = None
-    return_date: date = None
+    submission_date: datetime = None
+    return_date: datetime = None
 
     @property
     def price(self):

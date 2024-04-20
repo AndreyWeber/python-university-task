@@ -2,7 +2,7 @@
 from general import General
 
 
-class generalList:
+class GeneralList:
     def __init__(self):
         self._list = []
 
