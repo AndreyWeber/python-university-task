@@ -17,7 +17,6 @@ class General:
 
 #     def __init__(self, code=0):
 #         self.code = code
-#         # self.set_code(code)
 
 #     @property
 #     def code(self):

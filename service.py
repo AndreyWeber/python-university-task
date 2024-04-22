@@ -1,8 +1,9 @@
 # -*- coding:utf-8 -*-
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Optional
 from general import General
-from serviceKind import ServiceKind
+from service_type import ServiceType
 from client import Client
 
 
@@ -10,32 +11,23 @@ from client import Client
 class Service(General):
     """Class representing Dry Cleaning service"""
 
-    client: Client = None
-    service_kind: ServiceKind = None
-    count: int = 1
-    submission_date: datetime = None
-    return_date: datetime = None
+    discount_factor: float = field(default=0.97, init=False, repr=False)
 
-    @property
-    def price(self):
-        """Service price"""
+    service_type: Optional[ServiceType] = None
+    client: Optional[Client] = None
+    date_received: Optional[datetime] = None
+    date_returned: Optional[datetime] = None
+
+    def calculate_cost(self):
+        if self.client is None or self.service_type is None:
+            raise ValueError(
+                "Both 'client' and 'service_type' must be set to calculate the service cost."
+            )
         return (
-            self.service_kind.price if self.service_kind else ServiceKind.default_price
+            self.service_type.price * Service.discount_factor
+            if self.client.is_regular
+            else self.service_type.price
         )
 
-    @property
-    def sum(self):
-        """Service orders sum with discount applied"""
-        if self.client is None or self.service_kind is None:
-            return 0
-        discount = 0.03 if self.client.is_regular else 0
-        return self.count * self.price * (1 - discount)
-
-    @property
-    def description(self):
-        """Service instance string description"""
-        return (
-            f"{self.client.description} "
-            f"{self.service_kind.name} "
-            f"{self.price} {self.count} {self.sum}"
-        )
+    def finalize_service(self):
+        self.date_returned = datetime.now()
