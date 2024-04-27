@@ -18,7 +18,7 @@ class Service(General):
     date_received: Optional[datetime] = None
     date_returned: Optional[datetime] = None
 
-    def calculate_cost(self):
+    def calculate_cost(self) -> float:
         if self.client is None or self.service_type is None:
             raise ValueError(
                 "Both 'client' and 'service_type' must be set to calculate the service cost."
@@ -29,5 +29,8 @@ class Service(General):
             else self.service_type.price
         )
 
-    def finalize_service(self):
+    def start_service(self) -> None:
+        self.date_received = datetime.now()
+
+    def finalize_service(self) -> None:
         self.date_returned = datetime.now()

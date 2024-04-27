@@ -8,19 +8,20 @@ class GeneralDict:
         self._items: dict[int, General] = {}
 
     @property
-    def item_dict(self):
+    def item_dict(self) -> dict[int, General]:
         return self._items
 
     def clear(self) -> None:
         self._items.clear()
 
     def get_next_code(self) -> int:
+        # If item_dict is empty then the first code will be 0
         return max(self.item_dict.keys(), default=-1) + 1
 
     def add_item(self, item: General) -> None:
         if not isinstance(item, General):
             raise TypeError(
-                f"Expected an element of type 'General', but received '{type(item).__name__}'"
+                f"Expected an item of type 'General', but received '{type(item).__name__}'"
             )
         self.item_dict[item.code] = item
 
@@ -31,6 +32,6 @@ class GeneralDict:
     def remove_item(self, item: General) -> None:
         if not isinstance(item, General):
             raise TypeError(
-                f"Expected an element of type 'General', but received '{type(item).__name__}'"
+                f"Expected an item of type 'General', but received '{type(item).__name__}'"
             )
         self.remove_item_by_code(item.code)
