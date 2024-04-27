@@ -1,14 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<himchistka>
-	<client code="1" surname="Иванов" name="Иван" secname="Иванович" regular="1"/>
-	<client code="2" surname="Смирнов" name="Артем" secname="Артемович" regular="0"/>
-	<client code="3" surname="Петров" name="Петр" secname="Петрович" regular="1"/>
+<?xml version="1.0" encoding="utf-8"?>
+<dryCleaning>
+    <client code="1" name="Иван" surname="Иванов" secondName="Иванович" isRegular="True"/>
+    <client code="2" name="Артем" surname="Смирнов" secondName="Артемович" isRegular="False"/>
+    <client code="3" name="Петр" surname="Петров" secondName="Петрович" isRegular="True"/>
 
-	<kindService code="1" name="Химчистка костюма" typeservice="Чистка текстильных изделий" price="1000"/>
-	<kindService code="2" name="Химчистка матраса" typeservice="Чистка мягкой мебели" price="1500"/>
-	<kindService code="3" name="Химчистка коврового покрытия" typeservice="Чистка предметов интерьера" price="900"/>
+    <serviceType code="1" name="Химчистка костюма" type="Чистка текстильных изделий" price="1000"/>
+    <serviceType code="2" name="Химчистка матраса" type="Чистка мягкой мебели" price="1500"/>
+    <serviceType code="3" name="Химчистка коврового покрытия" type="Чистка предметов интерьера" price="900"/>
 
-	<service code = "1" kindService = '1' count = "2" dateReception="10.03.2022" dateReturn="18.03.2022" client='1'/>
-	<service code = "2" kindService = '2' count = "1" dateReception="23.03.2022" dateReturn="30.03.2022" client='2'/>
-	<service code = "3" kindService = '3' count = "1" dateReception="14.04.2022" dateReturn="21.04.2022" client='3'/>
-</himchistka>
+    <service code = "1" serviceType = "1" client="1" itemsCount = "2" dateReceived="10.03.2022" dateReturned="18.03.2022" />
+    <service code = "2" serviceType = "2" client="2" itemsCount = "1" dateReceived="23.03.2022" dateReturned="30.03.2022" />
+    <service code = "3" serviceType = "3" client="3" itemsCount = "1" dateReceived="14.04.2022" dateReturned="21.04.2022" />
+</dryCleaning>

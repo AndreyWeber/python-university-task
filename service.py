@@ -14,6 +14,7 @@ class Service(General):
     discount_factor: float = field(default=0.97, init=False, repr=False)
 
     service_type: Optional[ServiceType] = None
+    items_count: int = 0
     client: Optional[Client] = None
     date_received: Optional[datetime] = None
     date_returned: Optional[datetime] = None
@@ -23,10 +24,11 @@ class Service(General):
             raise ValueError(
                 "Both 'client' and 'service_type' must be set to calculate the service cost."
             )
+        total_cost = self.service_type.price * self.items_count
         return (
-            self.service_type.price * Service.discount_factor
+            total_cost * Service.discount_factor
             if self.client.is_regular
-            else self.service_type.price
+            else total_cost
         )
 
     def start_service(self) -> None:
