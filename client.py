@@ -16,3 +16,6 @@ class Client(General):
         if not isinstance(other, Client):
             return NotImplemented
         return self.code == other.code
+
+    def __str__(self) -> str:
+        return f"{self.surname} {self.name} {self.second_name}"
