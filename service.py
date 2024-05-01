@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 from general import General
@@ -11,7 +11,7 @@ from client import Client
 class Service(General):
     """Class representing Dry Cleaning service"""
 
-    discount_factor: float = field(default=0.97, init=False, repr=False)
+    discount_factor: float = 0.97
 
     service_type: Optional[ServiceType] = None
     items_count: int = 0
@@ -26,9 +26,7 @@ class Service(General):
             )
         total_cost = self.service_type.price * self.items_count
         return (
-            total_cost * Service.discount_factor
-            if self.client.is_regular
-            else total_cost
+            total_cost * self.discount_factor if self.client.is_regular else total_cost
         )
 
     def start_service(self) -> None:

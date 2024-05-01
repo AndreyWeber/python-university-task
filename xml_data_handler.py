@@ -49,7 +49,7 @@ class XmlDataHandler(BaseDataHandler):
                         client=self.data_source.clients.item_dict.get(
                             int(service_element.get("client")), None
                         ),
-                        items_count=service_element.get("itemsCount"),
+                        items_count=int(service_element.get("itemsCount")),
                         date_received=datetime.strptime(
                             service_element.get("dateReceived"), self.DATE_FORMAT
                         ),
