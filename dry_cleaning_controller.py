@@ -1,36 +1,48 @@
+from pathlib import Path
 from dry_cleaning_view import DryCleaningView
 from dry_cleaning import DryCleaning
+from base_data_handler import BaseDataHandler
+from xml_data_handler import XmlDataHandler
 
 
 class DryCleaningController:
     def __init__(self, model: DryCleaning, view: DryCleaningView):
-        self.model = model
-        self.view = view
+        self._model: DryCleaning = model
+        self._view: DryCleaningView = view
+
+        self._data_handler: BaseDataHandler = None
 
         # Connect signals to slots
-        self.view.load_xml_data_signal.connect(self.load_xml_data)
-        self.view.load_sqlite_data_signal.connect(self.load_sqlite_data)
-        self.view.save_xml_data_signal.connect(self.save_xml_data)
-        self.view.save_sqlite_data_signal.connect(self.save_sqlite_data)
+        self._view.load_xml_data_signal.connect(self.load_xml_data)
+        self._view.load_sqlite_data_signal.connect(self.load_sqlite_data)
+        self._view.save_xml_data_signal.connect(self.save_xml_data)
+        self._view.save_sqlite_data_signal.connect(self.save_sqlite_data)
 
         # Populate initial data
         self.populate_tabs()
 
     def populate_tabs(self):
-        services = self.model.services
-        self.view.tabs.widget(0).populate_table(services)
+        services = self._model.services
+        self._view.tabs.widget(0).populate_table(services)
 
     def load_xml_data(self):
-        pass
+        self._data_handler = XmlDataHandler(
+            self._model,
+            str(Path(".\\oldfile.xml").resolve()),
+            str(Path(".\\newfile.xml").resolve()),
+        )
+        self._data_handler.read()
+        self.populate_tabs()
 
     def load_sqlite_data(self):
-        pass
+        raise NotImplementedError("'load_sqlite_data()' not implemented")
 
     def save_xml_data(self):
-        pass
+        if not self._data_handler is None:
+            self._data_handler.write()
 
     def save_sqlite_data(self):
-        pass
+        raise NotImplementedError("'save_sqlite_data()' not implemented")
 
     def populate_table(self):
         pass

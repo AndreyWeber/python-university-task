@@ -8,21 +8,21 @@ from client_dict import ClientDict
 
 class DryCleaning:
     def __init__(self):
-        self.__service_types: ServiceTypeDict = ServiceTypeDict()
-        self.__clients: ClientDict = ClientDict()
-        self.__services: ServiceDict = ServiceDict()
+        self._service_types: ServiceTypeDict = ServiceTypeDict()
+        self._clients: ClientDict = ClientDict()
+        self._services: ServiceDict = ServiceDict()
 
     @property
     def service_types(self):
-        return self.__service_types
+        return self._service_types
 
     @property
     def clients(self):
-        return self.__clients
+        return self._clients
 
     @property
     def services(self):
-        return self.__services
+        return self._services
 
     def add_service_type(self, service_type: ServiceType) -> None:
         self.service_types.add_item(service_type)

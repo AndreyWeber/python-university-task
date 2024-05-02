@@ -13,33 +13,33 @@ class BaseDataHandler(ABC):
     def __init__(
         self, data_source: DryCleaning = None, input_val: str = "", output_val: str = ""
     ) -> None:
-        self.__data_source = data_source
-        self.__input = input_val
-        self.__output = output_val
+        self._data_source = data_source
+        self._input = input_val
+        self._output = output_val
 
     @property
     def data_source(self) -> DryCleaning:
-        return self.__data_source
+        return self._data_source
 
     @data_source.setter
     def data_source(self, data_source: DryCleaning) -> None:
-        self.__data_source = data_source
+        self._data_source = data_source
 
     @property
     def input(self) -> str:
-        return self.__input
+        return self._input
 
     @input.setter
     def input(self, value: str) -> None:
-        self.__input = value
+        self._input = value
 
     @property
     def output(self) -> str:
-        return self.__output
+        return self._output
 
     @output.setter
     def output(self, value: str) -> None:
-        self.__output = value
+        self._output = value
 
     @abstractmethod
     def read(self) -> None:

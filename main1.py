@@ -11,20 +11,12 @@ from dry_cleaning_controller import DryCleaningController
 
 def main():
     # try:
-    xml_data_handler = XmlDataHandler(
-        DryCleaning(),
-        str(Path(".\\oldfile.xml").resolve()),
-        str(Path(".\\newfile.xml").resolve()),
-    )
-    xml_data_handler.read()
-    # xml_data_handler.write()
-
     app = QApplication(sys.argv)
 
-    model = xml_data_handler.data_source
+    model = DryCleaning()  # xml_data_handler.data_source
     view = DryCleaningView()
 
-    DryCleaningController(model, view)
+    controller = DryCleaningController(model, view)
 
     view.show()
     sys.exit(app.exec_())
