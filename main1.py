@@ -3,9 +3,9 @@ import logging
 
 # pylint: disable=no-name-in-module
 from PyQt5.QtWidgets import QApplication
-from dry_cleaning import DryCleaning
-from dry_cleaning_view import DryCleaningView
-from dry_cleaning_controller import DryCleaningController
+from models.dry_cleaning import DryCleaning
+from views.dry_cleaning_view import DryCleaningView
+from controllers.dry_cleaning_controller import DryCleaningController
 
 logging.basicConfig(
     level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s"

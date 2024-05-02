@@ -1,6 +1,6 @@
 from pathlib import Path
-from dry_cleaning_view import DryCleaningView
-from dry_cleaning import DryCleaning
+from views.dry_cleaning_view import DryCleaningView
+from models.dry_cleaning import DryCleaning
 from api.base_data_handler import BaseDataHandler
 from api.xml_data_handler import XmlDataHandler
 

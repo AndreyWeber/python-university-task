@@ -13,7 +13,7 @@ Usage:
 """
 
 from abc import ABC, abstractmethod
-from dry_cleaning import DryCleaning
+from models.dry_cleaning import DryCleaning
 
 
 class BaseDataHandler(ABC):
