@@ -7,13 +7,13 @@ from PyQt5.QtWidgets import (
 )
 
 
-class GenericTableWidget(QWidget):
-    def __init__(self, headers: List[str]):
+class BaseTableWidget(QWidget):
+    def __init__(self, headers: List[str]) -> None:
         super().__init__()
         self.headers = headers
         self.initUI()
 
-    def initUI(self):
+    def initUI(self) -> None:
         self.layout = QVBoxLayout(self)
 
         self.table = QTableWidget(self)

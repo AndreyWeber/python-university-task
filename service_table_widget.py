@@ -1,10 +1,10 @@
 # pylint: disable=no-name-in-module
 from PyQt5.QtWidgets import QTableWidgetItem
-from generic_table_widget import GenericTableWidget
+from base_table_widget import BaseTableWidget
 from service_dict import ServiceDict
 
 
-class ServiceTableWidget(GenericTableWidget):
+class ServiceTableWidget(BaseTableWidget):
     def __init__(self):
         headers = [
             "Code",
