@@ -1,5 +1,5 @@
 from entities.service_type import ServiceType
-from general_dict import GeneralDict
+from entities.general_dict import GeneralDict
 
 
 class ServiceTypeDict(GeneralDict):

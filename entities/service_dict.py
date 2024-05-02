@@ -1,7 +1,7 @@
 from entities.general import General
 from entities.service import Service
 from entities.client import Client
-from general_dict import GeneralDict
+from entities.general_dict import GeneralDict
 
 
 class ServiceDict(GeneralDict):

@@ -1,9 +1,9 @@
 from entities.service_type import ServiceType
 from entities.service import Service
 from entities.client import Client
-from service_type_dict import ServiceTypeDict
-from service_dict import ServiceDict
-from client_dict import ClientDict
+from entities.service_type_dict import ServiceTypeDict
+from entities.service_dict import ServiceDict
+from entities.client_dict import ClientDict
 
 
 class DryCleaning:

@@ -1,5 +1,5 @@
 from entities.client import Client
-from general_dict import GeneralDict
+from entities.general_dict import GeneralDict
 
 
 class ClientDict(GeneralDict):

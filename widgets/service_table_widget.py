@@ -1,7 +1,7 @@
 # pylint: disable=no-name-in-module
 from PyQt5.QtWidgets import QTableWidgetItem
-from base_table_widget import BaseTableWidget
-from service_dict import ServiceDict
+from widgets.base_table_widget import BaseTableWidget
+from entities.service_dict import ServiceDict
 
 
 class ServiceTableWidget(BaseTableWidget):

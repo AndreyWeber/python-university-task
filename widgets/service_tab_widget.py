@@ -4,11 +4,11 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 from PyQt5.QtCore import pyqtSignal
-from service_table_widget import ServiceTableWidget
-from service_dict import ServiceDict
+from widgets.service_table_widget import ServiceTableWidget
+from entities.service_dict import ServiceDict
 
 
-class ServiceTab(QWidget):
+class ServiceTabWidget(QWidget):
     populate_service_table_signal = pyqtSignal(ServiceDict)
 
     def __init__(self):

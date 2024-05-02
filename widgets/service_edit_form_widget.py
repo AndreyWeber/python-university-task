@@ -1,4 +1,4 @@
-from base_edit_form_widget import BaseEditFormWidget
+from widgets.base_edit_form_widget import BaseEditFormWidget
 
 
 class ServiceEditFormWidget(BaseEditFormWidget):
