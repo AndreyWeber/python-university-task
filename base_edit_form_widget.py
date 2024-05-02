@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import (
 class BaseEditFormWidget(QWidget, ABC):
     save_button_signal = pyqtSignal()
     add_button_signal = pyqtSignal()
-    deelete_button_signal = pyqtSignal()
+    delete_button_signal = pyqtSignal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -40,16 +40,23 @@ class BaseEditFormWidget(QWidget, ABC):
         # Connect buttons to their respective signals
         self.save_button.clicked.connect(self.save_button_signal.emit)
         self.add_button.clicked.connect(self.add_button_signal.emit)
-        self.delete_button.clicked.connect(self.deelete_button_signal.emit)
+        self.delete_button.clicked.connect(self.delete_button_signal.emit)
 
         buttons_layout.addWidget(self.save_button)
         buttons_layout.addWidget(self.add_button)
         buttons_layout.addWidget(self.delete_button)
 
+        # Add form specific buttons
+        self.add_action_buttons()
+
         self.layout.addLayout(buttons_layout)
 
     @abstractmethod
     def add_edit_controls(self) -> None:
+        pass
+
+    @abstractmethod
+    def add_action_buttons(self) -> None:
         pass
 
     @abstractmethod

@@ -2,9 +2,9 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
-from general import General
-from service_type import ServiceType
-from client import Client
+from entities.general import General
+from entities.service_type import ServiceType
+from entities.client import Client
 
 
 @dataclass(slots=True)

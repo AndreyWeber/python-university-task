@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from dataclasses import dataclass, field
-from general import General
+from entities.general import General
 
 
 @dataclass(slots=True)

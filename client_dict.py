@@ -1,4 +1,4 @@
-from client import Client
+from entities.client import Client
 from general_dict import GeneralDict
 
 

@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from general import General
+from entities.general import General
 
 
 class GeneralDict:

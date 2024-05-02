@@ -1,6 +1,6 @@
-from general import General
-from service import Service
-from client import Client
+from entities.general import General
+from entities.service import Service
+from entities.client import Client
 from general_dict import GeneralDict
 
 

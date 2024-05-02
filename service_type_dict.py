@@ -1,4 +1,4 @@
-from service_type import ServiceType
+from entities.service_type import ServiceType
 from general_dict import GeneralDict
 
 

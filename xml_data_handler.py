@@ -2,9 +2,9 @@ import os
 from datetime import datetime
 from lxml import etree
 from base_data_handler import BaseDataHandler
-from client import Client
-from service_type import ServiceType
-from service import Service
+from entities.client import Client
+from entities.service_type import ServiceType
+from entities.service import Service
 
 
 class XmlDataHandler(BaseDataHandler):
