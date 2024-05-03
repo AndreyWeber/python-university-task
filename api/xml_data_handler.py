@@ -43,10 +43,10 @@ class XmlDataHandler(BaseDataHandler):
                 self.data_source.add_service(
                     Service(
                         code=int(service_element.get("code")),
-                        service_type=self.data_source.service_types.item_dict.get(
+                        service_type=self.data_source.service_types.get(
                             int(service_element.get("serviceType")), None
                         ),
-                        client=self.data_source.clients.item_dict.get(
+                        client=self.data_source.clients.get(
                             int(service_element.get("client")), None
                         ),
                         items_count=int(service_element.get("itemsCount")),
@@ -64,7 +64,7 @@ class XmlDataHandler(BaseDataHandler):
         root = etree.Element("dryCleaning")
 
         # Populate the XML with Client data
-        for client in self.data_source.clients.item_dict.values():
+        for client in self.data_source.clients.values():
             client_element = etree.SubElement(root, "client")
             client_element.set("code", str(client.code))
             client_element.set("name", client.name)
@@ -72,14 +72,14 @@ class XmlDataHandler(BaseDataHandler):
             client_element.set("secondName", client.second_name)
             client_element.set("isRegular", str(client.is_regular))
         # Populate the XML with ServiceType data
-        for service_type in self.data_source.service_types.item_dict.values():
+        for service_type in self.data_source.service_types.values():
             service_type_element = etree.SubElement(root, "serviceType")
             service_type_element.set("code", str(service_type.code))
             service_type_element.set("name", service_type.name)
             service_type_element.set("type", service_type.type)
             service_type_element.set("price", str(service_type.price))
         # Populate the XML with Service data
-        for service in self.data_source.services.item_dict.values():
+        for service in self.data_source.services.values():
             service_element = etree.SubElement(root, "service")
             service_element.set("code", str(service.code))
             service_element.set("serviceType", str(service.service_type.code))

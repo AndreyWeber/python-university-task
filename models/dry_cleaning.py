@@ -38,22 +38,12 @@ class DryCleaning:
         self.services.add_item(service)
 
     def start_service(self, service: Service) -> None:
-        if not isinstance(service, Service):
-            raise TypeError(
-                f"Expected an item of type 'Service', but received '{type(service).__name__}'"
-            )
-
         self.make_client_regular(service)
         service.start_service()
         self.add_service(service)
 
     def finalize_service(self, code: int) -> None:
-        if not isinstance(code, int):
-            raise TypeError(
-                f"Expected code of type 'int', but received '{type(code).__name__}'"
-            )
-
-        service_to_finalize: Service = self.services.item_dict.get(code, None)
+        service_to_finalize: Service = self.services.get(code, None)
         if service_to_finalize is None:
             raise ValueError(f"Service with code: {code} is not registered")
 

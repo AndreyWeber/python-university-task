@@ -19,10 +19,10 @@ class ServiceTableWidget(BaseTableWidget):
         super().__init__(headers)
 
     def populate_table(self, items_dict: ServiceDict) -> None:
-        items_dict = items_dict.item_dict.values()
-        self.table.setRowCount(len(items_dict))
+        values = items_dict.values()
+        self.table.setRowCount(len(values))
 
-        for row, service in enumerate(items_dict):
+        for row, service in enumerate(values):
             self.table.setItem(row, 0, QTableWidgetItem(str(service.code)))
             self.table.setItem(row, 1, QTableWidgetItem(service.service_type.name))
             self.table.setItem(row, 2, QTableWidgetItem(service.service_type.type))
