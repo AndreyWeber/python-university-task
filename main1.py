@@ -16,7 +16,7 @@ def main():
     try:
         app = QApplication(sys.argv)
 
-        model = DryCleaning()  # xml_data_handler.data_source
+        model = DryCleaning()
         view = DryCleaningView()
 
         # pylint: disable=unused-variable
@@ -27,7 +27,7 @@ def main():
 
     # pylint: disable=broad-exception-caught
     except Exception as e:
-        logging.error("An error occurred: %e", e, exc_info=True)
+        logging.error("An error occurred: %s", e, exc_info=True)
         sys.exit(1)
 
 

@@ -8,10 +8,12 @@ from PyQt5.QtWidgets import (
     QFormLayout,
     QHBoxLayout,
     QPushButton,
+    QGroupBox,
 )
+from widgets.meta_qwidget_abc import MetaQWidgetABC
 
 
-class BaseEditFormWidget(QWidget, ABC):
+class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     save_button_signal = pyqtSignal()
     add_button_signal = pyqtSignal()
     delete_button_signal = pyqtSignal()
@@ -23,15 +25,16 @@ class BaseEditFormWidget(QWidget, ABC):
     def initUI(self) -> None:
         self.layout = QVBoxLayout(self)
 
-        # Create and add controls to the form layout
+        # Create and add control widgets form layout
         self.form_layout = QFormLayout()
 
-        self.add_edit_controls()
+        group_box = QGroupBox("Service Details")
+        group_box.setLayout(self.form_layout)
 
-        self.layout.addLayout(self.form_layout)
+        self.layout.addWidget(group_box)
 
-        # Create buttons layout and add buttons
-        buttons_layout = QHBoxLayout()
+        # Create and add buttons layout and basic buttons
+        self.buttons_layout = QHBoxLayout()
 
         self.save_button = QPushButton("Save")
         self.add_button = QPushButton("Add")
@@ -42,22 +45,11 @@ class BaseEditFormWidget(QWidget, ABC):
         self.add_button.clicked.connect(self.add_button_signal.emit)
         self.delete_button.clicked.connect(self.delete_button_signal.emit)
 
-        buttons_layout.addWidget(self.save_button)
-        buttons_layout.addWidget(self.add_button)
-        buttons_layout.addWidget(self.delete_button)
+        self.buttons_layout.addWidget(self.save_button)
+        self.buttons_layout.addWidget(self.add_button)
+        self.buttons_layout.addWidget(self.delete_button)
 
-        # Add form specific buttons
-        self.add_action_buttons()
-
-        self.layout.addLayout(buttons_layout)
-
-    @abstractmethod
-    def add_edit_controls(self) -> None:
-        pass
-
-    @abstractmethod
-    def add_action_buttons(self) -> None:
-        pass
+        self.layout.addLayout(self.buttons_layout)
 
     @abstractmethod
     def populate_edit_controls(self) -> None:
