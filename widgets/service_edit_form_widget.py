@@ -7,9 +7,13 @@ from PyQt5.QtWidgets import (
     QSpinBox,
 )
 from widgets.base_edit_form_widget import BaseEditFormWidget
+from entities.service import Service
 
 
 class ServiceEditFormWidget(BaseEditFormWidget):
+    receive_button_signal = pyqtSignal()
+    return_button_signal = pyqtSignal()
+
     def __init__(self) -> None:
         self.labels = [
             "Service Name",
@@ -18,7 +22,6 @@ class ServiceEditFormWidget(BaseEditFormWidget):
             "Items Count",
         ]
         super().__init__()
-        self.initUI()
 
     def initUI(self) -> None:
         super().initUI()
@@ -35,6 +38,7 @@ class ServiceEditFormWidget(BaseEditFormWidget):
                     widget = QComboBox()
                 case "Items Count":
                     widget = QSpinBox()
+                    widget.setMinimum(0)
                 case _:
                     raise ValueError(f"Invalid Service edit label: {label}")
 
@@ -45,8 +49,12 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         self.receive_button = QPushButton("Receive Item(s)")
         self.return_button = QPushButton("Return Item(s)")
 
+        self.receive_button.clicked.connect(self.receive_button_signal.emit)
+        self.return_button.clicked.connect(self.return_button_signal.emit)
+
         self.buttons_layout.addWidget(self.receive_button)
         self.buttons_layout.addWidget(self.return_button)
 
-    def populate_edit_controls(self) -> None:
-        pass
+    def populate_edit_controls(self, item: Service) -> None:
+        self.control_widgets["Service Name"].setText(item.service_type.name)
+        self.control_widgets["Items Count"].setValue(item.items_count)

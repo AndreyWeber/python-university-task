@@ -13,10 +13,20 @@ class DryCleaningController:
         self._data_handler: BaseDataHandler = None
 
         # Connect signals to slots
+
+        # Top menu signals
         self._view.load_xml_data_signal.connect(self.load_xml_data)
         self._view.load_sqlite_data_signal.connect(self.load_sqlite_data)
         self._view.save_xml_data_signal.connect(self.save_xml_data)
         self._view.save_sqlite_data_signal.connect(self.save_sqlite_data)
+
+        # Service table signals
+        #! TODO: self._view can store currently active tab index to use it in widget(0)
+        svc_table_wdgt = self._view.tabs.widget(0).service_table_widget
+        svc_table_wdgt.table_cell_clicked_signal.connect(self.on_cell_clicked)
+        svc_table_wdgt.table_row_header_clicked_signal.connect(
+            self.on_row_header_clicked
+        )
 
         # Populate initial data
         self.populate_tabs()
@@ -25,6 +35,35 @@ class DryCleaningController:
         services = self._model.services
         self._view.tabs.widget(0).populate_table(services)
 
+    def on_cell_clicked(self, cell_index) -> None:
+        row_index = cell_index.row()
+        code = self._view.tabs.widget(0).get_code_value(row_index)
+        if not code:
+            #! TODO: Would be good to add logging here
+            return
+        service = self._model.services.get(code, None)
+        self._view.tabs.widget(0).populate_edit_controls(service)
+
+    def on_row_header_clicked(self, row_index) -> None:
+        print(f"Row {row_index} clicked")
+        self._view.tabs.widget(0).populate_edit_controls(row_index)
+
+    def populate_table(self):
+        pass
+
+    def adjust_columns_size(self):
+        pass
+
+    def adjust_window_size(self):
+        pass
+
+    def load_data_into_edits(self, row):
+        pass
+
+    def on_save_changes_clicked(self):
+        pass
+
+    # Top menu action handlers
     def load_xml_data(self):
         self._data_handler = XmlDataHandler(
             self._model,
@@ -43,27 +82,6 @@ class DryCleaningController:
 
     def save_sqlite_data(self):
         raise NotImplementedError("'save_sqlite_data()' not implemented")
-
-    def populate_table(self):
-        pass
-
-    def adjust_columns_size(self):
-        pass
-
-    def adjust_window_size(self):
-        pass
-
-    def on_cell_clicked(self, index):
-        pass
-
-    def on_row_header_clicked(self, index):
-        pass
-
-    def load_data_into_edits(self, row):
-        pass
-
-    def on_save_changes_clicked(self):
-        pass
 
 
 # class DryCleaningView(QMainWindow):

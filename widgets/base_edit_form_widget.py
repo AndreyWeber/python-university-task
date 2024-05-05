@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import (
     QGroupBox,
 )
 from widgets.meta_qwidget_abc import MetaQWidgetABC
+from entities.general import General
 
 
 class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
@@ -52,5 +53,5 @@ class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
         self.layout.addLayout(self.buttons_layout)
 
     @abstractmethod
-    def populate_edit_controls(self) -> None:
+    def populate_edit_controls(self, item: General) -> None:
         pass
