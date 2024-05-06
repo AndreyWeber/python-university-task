@@ -7,6 +7,8 @@ from api.xml_data_handler import XmlDataHandler
 
 class DryCleaningController:
     def __init__(self, model: DryCleaning, view: DryCleaningView):
+        self._available_tabs = {}
+
         self._model: DryCleaning = model
         self._view: DryCleaningView = view
         self._data_handler: BaseDataHandler = None
@@ -19,21 +21,44 @@ class DryCleaningController:
         self._view.save_xml_data_signal.connect(self.save_xml_data)
         self._view.save_sqlite_data_signal.connect(self.save_sqlite_data)
 
-        # Tab change signal
-        self._view.tab_changed_signal.connect(self.populate_tab)
+        # Tabs and tab widgets signals
+        self._view.tab_changed_signal.connect(self.on_tab_change)
+        self.connect_tab_widget_signals()
 
-        # Service table signals
-        table_widget = self._view.tabs.widget(self._view.active_tab_index).table_widget
+        # Populate initial data
+        self.populate_active_tab()
+
+    def on_tab_change(self) -> None:
+        self.connect_tab_widget_signals()
+        self.populate_active_tab()
+
+    def connect_tab_widget_signals(self) -> None:
+        # Connect table widget signals to slots
+        active_tab_index = self._view.active_tab_index
+        table_widget = self._view.tabs.widget(active_tab_index).table_widget
+
+        self.disconnect_signal_gracefully(table_widget.table_cell_clicked_signal)
+        self.disconnect_signal_gracefully(table_widget.table_row_header_clicked_signal)
+
         table_widget.table_cell_clicked_signal.connect(self.on_cell_clicked)
         table_widget.table_row_header_clicked_signal.connect(self.on_row_header_clicked)
 
-        # Populate initial data
-        self.populate_tab()
-
-    def populate_tab(self) -> None:
+    def populate_active_tab(self) -> None:
         active_tab_index = self._view.active_tab_index
-        services = self._model.services
-        self._view.tabs.widget(active_tab_index).populate_table(services)
+        match active_tab_index:
+            case 0:
+                items = self._model.services
+            case 1:
+                items = self._model.service_types
+            case 2:
+                raise NotImplementedError(
+                    f"This tab index processing not implemented yet: {active_tab_index}"
+                )
+            case _:
+                raise ValueError(f"Invalid active tab index: {active_tab_index}")
+
+        # Populate table widgets
+        self._view.tabs.widget(active_tab_index).populate_table(items)
 
     def on_cell_clicked(self, cell_index) -> None:
         row_index = cell_index.row()
@@ -46,8 +71,27 @@ class DryCleaningController:
         if not code:
             #! TODO: Would be good to add logging here
             return
-        service = self._model.services.get(code, None)
-        active_tab.populate_edit_controls(service)
+
+        match active_tab_index:
+            case 0:
+                item = self._model.services.get(code, None)
+            case 1:
+                item = self._model.service_types.get(code, None)
+            case 2:
+                raise NotImplementedError(
+                    f"This tab index processing not implemented yet: {active_tab_index}"
+                )
+            case _:
+                raise ValueError(f"Invalid active tab index: {active_tab_index}")
+
+        active_tab.populate_edit_controls(item)
+
+    def disconnect_signal_gracefully(self, signal) -> None:
+        try:
+            signal.disconnect()
+        except TypeError:
+            #! TODO: Add logging here
+            print(f"No connection to disconnect for '{signal}'")
 
     def adjust_columns_size(self):
         pass
@@ -68,7 +112,7 @@ class DryCleaningController:
             str(Path(".\\newfile.xml").resolve()),
         )
         self._data_handler.read()
-        self.populate_tab()
+        self.populate_active_tab()
 
     def load_sqlite_data(self):
         raise NotImplementedError("'load_sqlite_data()' not implemented")

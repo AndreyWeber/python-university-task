@@ -27,9 +27,6 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     def initUI(self) -> None:
         self.layout = QVBoxLayout(self)
 
-        # self.service_table_widget = ServiceTableWidget()
-        # self.service_edit_form_widget = ServiceEditFormWidget()
-
         self.populate_table_widget_signal.connect(self.table_widget.populate_table)
         self.populate_edit_controls_widget.connect(
             self.edit_form_widget.populate_edit_controls
