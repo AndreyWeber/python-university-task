@@ -21,6 +21,7 @@ class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
 
     def __init__(self) -> None:
         super().__init__()
+        # This statement will call initUI() in the derived class first
         self.initUI()
 
     def initUI(self) -> None:

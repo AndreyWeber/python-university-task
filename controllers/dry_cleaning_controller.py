@@ -23,13 +23,9 @@ class DryCleaningController:
         self._view.tab_changed_signal.connect(self.populate_tab)
 
         # Service table signals
-        svc_table_wdgt = self._view.tabs.widget(
-            self._view.active_tab_index
-        ).service_table_widget
-        svc_table_wdgt.table_cell_clicked_signal.connect(self.on_cell_clicked)
-        svc_table_wdgt.table_row_header_clicked_signal.connect(
-            self.on_row_header_clicked
-        )
+        table_widget = self._view.tabs.widget(self._view.active_tab_index).table_widget
+        table_widget.table_cell_clicked_signal.connect(self.on_cell_clicked)
+        table_widget.table_row_header_clicked_signal.connect(self.on_row_header_clicked)
 
         # Populate initial data
         self.populate_tab()
