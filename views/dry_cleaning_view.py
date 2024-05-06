@@ -16,9 +16,13 @@ class DryCleaningView(QMainWindow):
     load_sqlite_data_signal = pyqtSignal()
     save_xml_data_signal = pyqtSignal()
     save_sqlite_data_signal = pyqtSignal()
+    tab_changed_signal = pyqtSignal()
+
+    default_tab_index: int = 0
 
     def __init__(self):
         super().__init__()
+        self._active_tab_index = self.default_tab_index
         self.initUI()
 
     def initUI(self) -> None:
@@ -41,11 +45,25 @@ class DryCleaningView(QMainWindow):
         self.tabs.addTab(QWidget(), "Service Types")
         self.tabs.addTab(QWidget(), "Clients")
 
+        # Connect the tab change signal
+        self.tabs.currentChanged.connect(self.on_tab_change)
+
         main_layout.addWidget(self.tabs)
 
         self.setCentralWidget(central_widget)
 
-    def create_menu_bar(self):
+    @property
+    def active_tab_index(self) -> int:
+        return self._active_tab_index
+
+    @active_tab_index.setter
+    def active_tab_index(self, value) -> None:
+        if self._active_tab_index == value:
+            return
+        self._active_tab_index = value
+        self.tab_changed_signal.emit()
+
+    def create_menu_bar(self) -> None:
         menu_bar = QMenuBar(self)
 
         file_menu = menu_bar.addMenu("File")
@@ -67,3 +85,6 @@ class DryCleaningView(QMainWindow):
         file_menu.addAction(save_sqlite_action)
 
         self.setMenuBar(menu_bar)
+
+    def on_tab_change(self, index: int) -> None:
+        self.active_tab_index = index

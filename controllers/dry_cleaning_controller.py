@@ -9,7 +9,6 @@ class DryCleaningController:
     def __init__(self, model: DryCleaning, view: DryCleaningView):
         self._model: DryCleaning = model
         self._view: DryCleaningView = view
-
         self._data_handler: BaseDataHandler = None
 
         # Connect signals to slots
@@ -20,36 +19,39 @@ class DryCleaningController:
         self._view.save_xml_data_signal.connect(self.save_xml_data)
         self._view.save_sqlite_data_signal.connect(self.save_sqlite_data)
 
+        # Tab change signal
+        self._view.tab_changed_signal.connect(self.populate_tab)
+
         # Service table signals
-        #! TODO: self._view can store currently active tab index to use it in widget(0)
-        svc_table_wdgt = self._view.tabs.widget(0).service_table_widget
+        svc_table_wdgt = self._view.tabs.widget(
+            self._view.active_tab_index
+        ).service_table_widget
         svc_table_wdgt.table_cell_clicked_signal.connect(self.on_cell_clicked)
         svc_table_wdgt.table_row_header_clicked_signal.connect(
             self.on_row_header_clicked
         )
 
         # Populate initial data
-        self.populate_tabs()
+        self.populate_tab()
 
-    def populate_tabs(self):
+    def populate_tab(self) -> None:
+        active_tab_index = self._view.active_tab_index
         services = self._model.services
-        self._view.tabs.widget(0).populate_table(services)
+        self._view.tabs.widget(active_tab_index).populate_table(services)
 
     def on_cell_clicked(self, cell_index) -> None:
         row_index = cell_index.row()
-        code = self._view.tabs.widget(0).get_code_value(row_index)
+        self.on_row_header_clicked(row_index)
+
+    def on_row_header_clicked(self, row_index) -> None:
+        active_tab_index = self._view.active_tab_index
+        active_tab = self._view.tabs.widget(active_tab_index)
+        code = active_tab.get_code_value(row_index)
         if not code:
             #! TODO: Would be good to add logging here
             return
         service = self._model.services.get(code, None)
-        self._view.tabs.widget(0).populate_edit_controls(service)
-
-    def on_row_header_clicked(self, row_index) -> None:
-        print(f"Row {row_index} clicked")
-        self._view.tabs.widget(0).populate_edit_controls(row_index)
-
-    def populate_table(self):
-        pass
+        active_tab.populate_edit_controls(service)
 
     def adjust_columns_size(self):
         pass
@@ -57,13 +59,12 @@ class DryCleaningController:
     def adjust_window_size(self):
         pass
 
-    def load_data_into_edits(self, row):
-        pass
-
     def on_save_changes_clicked(self):
         pass
 
+    #
     # Top menu action handlers
+    #
     def load_xml_data(self):
         self._data_handler = XmlDataHandler(
             self._model,
@@ -71,7 +72,7 @@ class DryCleaningController:
             str(Path(".\\newfile.xml").resolve()),
         )
         self._data_handler.read()
-        self.populate_tabs()
+        self.populate_tab()
 
     def load_sqlite_data(self):
         raise NotImplementedError("'load_sqlite_data()' not implemented")

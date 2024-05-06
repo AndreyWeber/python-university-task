@@ -35,7 +35,11 @@ class BaseTableWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
 
         self.layout.addWidget(self.table)
 
-    def get_code_value(self, row_index: int) -> int:
+    @abstractmethod
+    def populate_table(self, items_dict: GeneralDict) -> None:
+        pass
+
+    def get_code_value(self, row_index: int) -> int | None:
         if row_index < 0 or row_index >= self.table.rowCount():
             return None
 
@@ -44,7 +48,3 @@ class BaseTableWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
             return int(item.text())
         #! TODO: Would be good to add logging here
         return None
-
-    @abstractmethod
-    def populate_table(self, items_dict: GeneralDict) -> None:
-        pass

@@ -34,8 +34,6 @@ class ServiceTabWidget(QWidget):
         self.layout.addWidget(self.service_table_widget)
         self.layout.addWidget(self.service_edit_form_widget)
 
-        # bind populate edit controls
-
     def populate_table(self, services: ServiceDict) -> None:
         if not services:
             return
