@@ -8,7 +8,7 @@ from views.dry_cleaning_view import DryCleaningView
 from controllers.dry_cleaning_controller import DryCleaningController
 
 logging.basicConfig(
-    level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 

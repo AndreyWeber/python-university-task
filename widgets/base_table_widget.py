@@ -46,5 +46,4 @@ class BaseTableWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
         item = self.table.item(row_index, 0)
         if item:
             return int(item.text())
-        #! TODO: Would be good to add logging here
         return None

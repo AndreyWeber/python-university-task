@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from views.dry_cleaning_view import DryCleaningView
 from models.dry_cleaning import DryCleaning
@@ -7,6 +8,8 @@ from api.xml_data_handler import XmlDataHandler
 
 class DryCleaningController:
     def __init__(self, model: DryCleaning, view: DryCleaningView):
+        self.logger = logging.getLogger(__name__)
+
         self._available_tabs = {}
 
         self._model: DryCleaning = model
@@ -69,7 +72,11 @@ class DryCleaningController:
         active_tab = self._view.tabs.widget(active_tab_index)
         code = active_tab.get_code_value(row_index)
         if not code:
-            #! TODO: Would be good to add logging here
+            self.logger.info(
+                "Failed to get entity code. row_index: %s, active_tab_index: %s",
+                row_index,
+                active_tab_index,
+            )
             return
 
         match active_tab_index:
@@ -90,8 +97,7 @@ class DryCleaningController:
         try:
             signal.disconnect()
         except TypeError:
-            #! TODO: Add logging here
-            print(f"No connection to disconnect for '{signal}'")
+            self.logger.info("No connection to disconnect for '%s'", signal)
 
     def adjust_columns_size(self):
         pass
