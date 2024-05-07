@@ -1,17 +1,19 @@
 # pylint: disable=no-name-in-module
 from PyQt5.QtWidgets import (
     QLineEdit,
+    QCheckBox,
 )
 from widgets.base_edit_form_widget import BaseEditFormWidget
-from entities.service_type import ServiceType
+from entities.client import Client
 
 
-class ServiceTypeEditFormWidget(BaseEditFormWidget):
+class ClientEditFormWidget(BaseEditFormWidget):
     def __init__(self) -> None:
         self.labels = [
             "Name",
-            "Type",
-            "Price",
+            "Surname",
+            "Second Name",
+            "Is Regular",
         ]
         super().__init__()
 
@@ -24,19 +26,20 @@ class ServiceTypeEditFormWidget(BaseEditFormWidget):
             match label:
                 case "Name":
                     widget = QLineEdit()
-                case "Type":
+                case "Surname":
                     widget = QLineEdit()
-                case "Price":
-                    #! TODO: Check if there is a more suitable control
+                case "Second Name":
                     widget = QLineEdit()
-                    widget.setText("0")
+                case "Is Regular":
+                    widget = QCheckBox()
                 case _:
-                    raise ValueError(f"Invalid ServiceType edit label: {label}")
+                    raise ValueError(f"Invalid Client edit label: {label}")
 
             self.form_layout.addRow(f"{label}:", widget)
             self.control_widgets[label] = widget
 
-    def populate_edit_controls(self, item: ServiceType) -> None:
+    def populate_edit_controls(self, item: Client) -> None:
         self.control_widgets["Name"].setText(item.name)
-        self.control_widgets["Type"].setText(item.type)
-        self.control_widgets["Price"].setText(str(item.price))
+        self.control_widgets["Surname"].setText(item.surname)
+        self.control_widgets["Second Name"].setText(item.second_name)
+        self.control_widgets["Is Regular"].setChecked(item.is_regular)

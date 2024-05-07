@@ -11,6 +11,7 @@ from PyQt5.QtCore import pyqtSignal
 
 from widgets.service_tab_widget import ServiceTabWidget
 from widgets.service_type_tab_widget import ServiceTypeTabWidget
+from widgets.client_tab_widget import ClientTabWidget
 
 
 class DryCleaningView(QMainWindow):
@@ -43,8 +44,7 @@ class DryCleaningView(QMainWindow):
 
         self.tabs.addTab(ServiceTabWidget(), "Services")
         self.tabs.addTab(ServiceTypeTabWidget(), "Service Types")
-        # self.tabs.addTab(ClientsTab(), "Clients")
-        self.tabs.addTab(QWidget(), "Clients")
+        self.tabs.addTab(ClientTabWidget(), "Clients")
 
         # Connect the tab change signal
         self.tabs.currentChanged.connect(self.on_tab_change)

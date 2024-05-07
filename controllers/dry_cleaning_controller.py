@@ -54,9 +54,7 @@ class DryCleaningController:
             case 1:
                 items = self._model.service_types
             case 2:
-                raise NotImplementedError(
-                    f"This tab index processing not implemented yet: {active_tab_index}"
-                )
+                items = self._model.clients
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
 
@@ -85,9 +83,7 @@ class DryCleaningController:
             case 1:
                 item = self._model.service_types.get(code, None)
             case 2:
-                raise NotImplementedError(
-                    f"This tab index processing not implemented yet: {active_tab_index}"
-                )
+                item = self._model.clients.get(code, None)
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
 
