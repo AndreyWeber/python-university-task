@@ -40,3 +40,12 @@ class ServiceTypeEditFormWidget(BaseEditFormWidget):
         self.control_widgets["Name"].setText(item.name)
         self.control_widgets["Type"].setText(item.type)
         self.control_widgets["Price"].setText(str(item.price))
+
+    def on_save_button_clicked(self) -> None:
+        pass
+
+    def on_add_button_clicked(self) -> None:
+        pass
+
+    def on_delete_button_clicked(self) -> None:
+        pass
