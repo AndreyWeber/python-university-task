@@ -27,15 +27,24 @@ class DryCleaning:
     def add_service_type(self, service_type: ServiceType) -> None:
         self.service_types.add_item(service_type)
 
-    def make_client_regular(self, service: Service) -> None:
-        if self.services.get_client_count(service.client) >= 3:
-            service.client.is_regular = True
+    def remove_service_type_by_code(self, code: int) -> None:
+        self.service_types.remove_item_by_code(code)
 
     def add_client(self, client: Client) -> None:
         self.clients.add_item(client)
 
+    def remove_client_by_code(self, code: int) -> None:
+        self.clients.remove_item_by_code(code)
+
+    def make_client_regular(self, service: Service) -> None:
+        if self.services.get_client_count(service.client) >= 3:
+            service.client.is_regular = True
+
     def add_service(self, service: Service) -> None:
         self.services.add_item(service)
+
+    def remove_service_by_code(self, code: int) -> None:
+        self.services.remove_item_by_code(code)
 
     def start_service(self, service: Service) -> None:
         self.make_client_regular(service)

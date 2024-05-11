@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from entities.general import General
 from views.dry_cleaning_view import DryCleaningView
 from models.dry_cleaning import DryCleaning
 from api.base_data_handler import BaseDataHandler
@@ -39,12 +40,21 @@ class DryCleaningController:
         # Connect table widget signals to slots
         active_tab_index = self._view.active_tab_index
         table_widget = self._view.tabs.widget(active_tab_index).table_widget
+        edit_form_widget = self._view.tabs.widget(active_tab_index).edit_form_widget
 
+        # Table widget signals
         self.disconnect_signal_gracefully(table_widget.table_cell_clicked_signal)
         self.disconnect_signal_gracefully(table_widget.table_row_header_clicked_signal)
-
         table_widget.table_cell_clicked_signal.connect(self.on_cell_clicked)
         table_widget.table_row_header_clicked_signal.connect(self.on_row_header_clicked)
+
+        # Edit form signals
+        self.disconnect_signal_gracefully(edit_form_widget.add_button_signal)
+        self.disconnect_signal_gracefully(edit_form_widget.save_button_signal)
+        self.disconnect_signal_gracefully(edit_form_widget.delete_button_signal)
+        edit_form_widget.add_button_signal.connect(self.on_add_button_clicked)
+        edit_form_widget.save_button_signal.connect(self.on_save_button_clicked)
+        edit_form_widget.delete_button_signal.connect(self.on_delete_button_clicked)
 
     def populate_active_tab(self) -> None:
         active_tab_index = self._view.active_tab_index
@@ -61,6 +71,54 @@ class DryCleaningController:
         # Populate table widgets
         self._view.tabs.widget(active_tab_index).populate_table(items)
 
+    def on_add_button_clicked(self, item: General) -> None:
+        active_tab_index = self._view.active_tab_index
+        match active_tab_index:
+            case 0:
+                pass
+            case 1:
+                pass
+            case 2:
+                if not item.code is None:
+                    self.logger.warning("Can't add existing Client with code: '%s'", item.code)
+                    return
+                self._model.add_client(item)
+            case _:
+                raise ValueError(f"Invalid active tab index: {active_tab_index}")
+        self.populate_active_tab()
+
+    def on_save_button_clicked(self, item: General) -> None:
+        if item.code is None:
+            raise ValueError("'item' argument cannot be None")
+
+        active_tab_index = self._view.active_tab_index
+        match active_tab_index:
+            case 0:
+                pass
+            case 1:
+                pass
+            case 2:
+                if not item.code in self._model.clients:
+                    self.logger.error("Save failed. Client with code: '%s' doesn't exist", item.code)
+                    return
+                self._model.clients[item.code] = item
+            case _:
+                raise ValueError(f"Invalid active tab index: {active_tab_index}")
+        self.populate_active_tab()
+
+    def on_delete_button_clicked(self, code: int) -> None:
+        active_tab_index = self._view.active_tab_index
+        match active_tab_index:
+            case 0:
+                self._model.remove_service_by_code(code)
+            case 1:
+                self._model.remove_service_type_by_code(code)
+            case 2:
+                self._model.remove_client_by_code(code)
+            case _:
+                raise ValueError(f"Invalid active tab index: {active_tab_index}")
+        self.populate_active_tab()
+
     def on_cell_clicked(self, cell_index) -> None:
         row_index = cell_index.row()
         self.on_row_header_clicked(row_index)
@@ -69,7 +127,7 @@ class DryCleaningController:
         active_tab_index = self._view.active_tab_index
         active_tab = self._view.tabs.widget(active_tab_index)
         code = active_tab.get_code_value(row_index)
-        if not code:
+        if code is None:
             self.logger.info(
                 "Failed to get entity code. row_index: %s, active_tab_index: %s",
                 row_index,

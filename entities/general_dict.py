@@ -9,6 +9,8 @@ class GeneralDict(Dict[int, General]):
         return max(self.keys(), default=-1) + 1
 
     def add_item(self, item: General) -> None:
+        if item.code is None:
+            item.code = self.get_next_code()
         self[item.code] = item
 
     def remove_item_by_code(self, code: int) -> None:

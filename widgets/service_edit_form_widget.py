@@ -59,10 +59,13 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         self.control_widgets["Service Name"].setText(item.service_type.name)
         self.control_widgets["Items Count"].setValue(item.items_count)
 
+    def on_add_button_clicked(self) -> None:
+        pass
+
     def on_save_button_clicked(self) -> None:
         pass
 
-    def on_add_button_clicked(self) -> None:
+    def on_clear_button_clicked(self) -> None:
         pass
 
     def on_delete_button_clicked(self) -> None:

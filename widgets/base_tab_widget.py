@@ -36,7 +36,7 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
         self.layout.addWidget(self.edit_form_widget)
 
     def populate_table(self, items: GeneralDict) -> None:
-        if not items:
+        if items is None:
             return
         self.populate_table_widget_signal.emit(items)
 
