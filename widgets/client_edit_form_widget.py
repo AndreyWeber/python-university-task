@@ -30,11 +30,7 @@ class ClientEditFormWidget(BaseEditFormWidget):
         self.control_widgets = {}
         for label, required in self.labels.items():
             match label:
-                case "Name":
-                    widget = QLineEdit()
-                case "Surname":
-                    widget = QLineEdit()
-                case "Second Name":
+                case "Name" | "Surname" | "Second Name":
                     widget = QLineEdit()
                 case "Is Regular":
                     widget = QCheckBox()
@@ -55,6 +51,11 @@ class ClientEditFormWidget(BaseEditFormWidget):
         self.control_widgets["Is Regular"].setChecked(item.is_regular)
 
     def on_add_button_clicked(self) -> None:
+        validation_message = self.validate_control_values()
+        if not validation_message is None:
+            QMessageBox.warning(self, "Failed to add Client", validation_message)
+            return
+
         self._client = None
         client = Client(
             code = None,
@@ -63,21 +64,27 @@ class ClientEditFormWidget(BaseEditFormWidget):
             second_name = self.control_widgets["Second Name"].text(),
             is_regular = self.control_widgets["Is Regular"].isChecked()
         )
+        try:
+            self.add_button_signal.emit(client)
+        except ValueError as e:
+            QMessageBox.critical(self, "Failed to add Client", e)
 
-        self.add_button_signal.emit(client)
-
-    def on_save_button_clicked(self) -> None:
+    def on_update_button_clicked(self) -> None:
         if self._client is None:
-            warning = "Client is not selected"
-            QMessageBox.warning(self, "Failed to save", warning)
-            self.logger.warning(warning)
+            QMessageBox.warning(self, "Failed to update Client", "Client is not selected")
             return
+
+        validation_message = self.validate_control_values()
+        if not validation_message is None:
+            QMessageBox.warning(self, "Failed to update Client", validation_message)
+            return
+
         self._client.name = self.control_widgets["Name"].text()
         self._client.surname = self.control_widgets["Surname"].text()
         self._client.second_name = self.control_widgets["Second Name"].text()
         self._client.is_regular = self.control_widgets["Is Regular"].isChecked()
 
-        self.save_button_signal.emit(self._client)
+        self.update_button_signal.emit(self._client)
 
     def on_clear_button_clicked(self) -> None:
         self._client = None
@@ -88,9 +95,25 @@ class ClientEditFormWidget(BaseEditFormWidget):
 
     def on_delete_button_clicked(self) -> None:
         if self._client is None or self._client.code is None:
-            warning = "Client is not selected"
-            QMessageBox.warning(self, "Failed to delete", warning)
-            self.logger.warning(warning)
+            QMessageBox.warning(self, "Failed to delete Client", "Client is not selected")
             return
 
         self.delete_button_signal.emit(self._client.code)
+
+    def validate_control_values(self) -> str | None:
+        message_parts = []
+        value = ""
+        message = ""
+        for label, required in self.labels.items():
+            if not required:
+                continue
+            message = f"'{label}' value cannot be empty"
+            value = self.control_widgets[label].text().strip()
+            def append_message() -> None:
+                if value is None or value == "":
+                        message_parts.append(message)
+            match label:
+                case "Name" | "Surname" | "Second Name":
+                    append_message()
+
+        return "\n".join(message_parts) if len(message_parts) > 0 else None

@@ -62,7 +62,7 @@ class ServiceEditFormWidget(BaseEditFormWidget):
     def on_add_button_clicked(self) -> None:
         pass
 
-    def on_save_button_clicked(self) -> None:
+    def on_update_button_clicked(self) -> None:
         pass
 
     def on_clear_button_clicked(self) -> None:

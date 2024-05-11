@@ -8,5 +8,9 @@ Top Menu "File" -> "Load XML"<br>
 Other Top Menu actions not active yet<br>
 </p>
 <p>
-Tab push buttons "Add", "Delete", "Save", etc. not active yet
+    <ul>
+        <li><b>Services</b> tab - not implemented yet</li>
+        <li><b>Service Types</b> tab - not implemented yet</li>
+        <li><b>Clients</b> tab - implemented</li>
+    </ul>
 </p>

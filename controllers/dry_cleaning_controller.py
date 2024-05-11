@@ -50,10 +50,10 @@ class DryCleaningController:
 
         # Edit form signals
         self.disconnect_signal_gracefully(edit_form_widget.add_button_signal)
-        self.disconnect_signal_gracefully(edit_form_widget.save_button_signal)
+        self.disconnect_signal_gracefully(edit_form_widget.update_button_signal)
         self.disconnect_signal_gracefully(edit_form_widget.delete_button_signal)
         edit_form_widget.add_button_signal.connect(self.on_add_button_clicked)
-        edit_form_widget.save_button_signal.connect(self.on_save_button_clicked)
+        edit_form_widget.update_button_signal.connect(self.on_update_button_clicked)
         edit_form_widget.delete_button_signal.connect(self.on_delete_button_clicked)
 
     def populate_active_tab(self) -> None:
@@ -80,14 +80,16 @@ class DryCleaningController:
                 pass
             case 2:
                 if not item.code is None:
-                    self.logger.warning("Can't add existing Client with code: '%s'", item.code)
+                    self.logger.warning(
+                        "Can't add existing Client with code: '%s'", item.code
+                    )
                     return
                 self._model.add_client(item)
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
         self.populate_active_tab()
 
-    def on_save_button_clicked(self, item: General) -> None:
+    def on_update_button_clicked(self, item: General) -> None:
         if item.code is None:
             raise ValueError("'item' argument cannot be None")
 
@@ -99,7 +101,9 @@ class DryCleaningController:
                 pass
             case 2:
                 if not item.code in self._model.clients:
-                    self.logger.error("Save failed. Client with code: '%s' doesn't exist", item.code)
+                    self.logger.error(
+                        "Update failed. Client with code: '%s' doesn't exist", item.code
+                    )
                     return
                 self._model.clients[item.code] = item
             case _:
@@ -157,9 +161,6 @@ class DryCleaningController:
         pass
 
     def adjust_window_size(self):
-        pass
-
-    def on_save_changes_clicked(self):
         pass
 
     #

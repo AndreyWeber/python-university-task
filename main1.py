@@ -2,7 +2,10 @@ import sys
 import logging
 
 # pylint: disable=no-name-in-module
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import (
+    QApplication,
+    QMessageBox,
+)
 from models.dry_cleaning import DryCleaning
 from views.dry_cleaning_view import DryCleaningView
 from controllers.dry_cleaning_controller import DryCleaningController
@@ -12,23 +15,29 @@ logging.basicConfig(
 )
 
 
+def global_exception_hook(exctype, value, traceback):
+    logging.error("Application error", exc_info=(exctype, value, traceback))
+    QMessageBox.critical(
+        None,
+        "Application error",
+        "Unexpected application error occurred: " + str(value),
+    )
+    sys.exit(1)
+
+
 def main():
-    try:
-        app = QApplication(sys.argv)
+    sys.excepthook = global_exception_hook
 
-        model = DryCleaning()
-        view = DryCleaningView()
+    app = QApplication(sys.argv)
 
-        # pylint: disable=unused-variable
-        controller = DryCleaningController(model, view)
+    model = DryCleaning()
+    view = DryCleaningView()
 
-        view.show()
-        sys.exit(app.exec_())
+    # pylint: disable=unused-variable
+    controller = DryCleaningController(model, view)
 
-    # pylint: disable=broad-exception-caught
-    except Exception as e:
-        logging.error("An error occurred: %s", e, exc_info=True)
-        sys.exit(1)
+    view.show()
+    sys.exit(app.exec_())
 
 
 if __name__ == "__main__":

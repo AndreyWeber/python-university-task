@@ -16,7 +16,7 @@ from entities.general import General
 
 class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     add_button_signal = pyqtSignal(General)
-    save_button_signal = pyqtSignal(General)
+    update_button_signal = pyqtSignal(General)
     clear_button_signal = pyqtSignal()
     delete_button_signal = pyqtSignal(int)
 
@@ -40,18 +40,18 @@ class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
         self.buttons_layout = QHBoxLayout()
 
         self.add_button = QPushButton("Add")
-        self.save_button = QPushButton("Save")
+        self.update_button = QPushButton("Update")
         self.clear_button = QPushButton("Clear")
         self.delete_button = QPushButton("Delete")
 
         # Connect buttons to their respective signals
         self.add_button.clicked.connect(self.on_add_button_clicked)
-        self.save_button.clicked.connect(self.on_save_button_clicked)
+        self.update_button.clicked.connect(self.on_update_button_clicked)
         self.clear_button.clicked.connect(self.on_clear_button_clicked)
         self.delete_button.clicked.connect(self.on_delete_button_clicked)
 
         self.buttons_layout.addWidget(self.add_button)
-        self.buttons_layout.addWidget(self.save_button)
+        self.buttons_layout.addWidget(self.update_button)
         self.buttons_layout.addWidget(self.clear_button)
         self.buttons_layout.addWidget(self.delete_button)
 
@@ -62,7 +62,7 @@ class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
         pass
 
     @abstractmethod
-    def on_save_button_clicked(self) -> None:
+    def on_update_button_clicked(self) -> None:
         pass
 
     @abstractmethod
