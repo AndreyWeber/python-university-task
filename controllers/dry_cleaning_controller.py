@@ -73,20 +73,25 @@ class DryCleaningController:
 
     def on_add_button_clicked(self, item: General) -> None:
         active_tab_index = self._view.active_tab_index
+
         match active_tab_index:
             case 0:
                 pass
             case 1:
-                pass
+                if item.code in self._model.service_types:
+                    raise ValueError(
+                        f"Can't add existing Service Type with code: '{item.code}'"
+                    )
+                self._model.add_service_type(item)
             case 2:
-                if not item.code is None:
-                    message = f"Can't add existing Client with code: '{item.code}'"
-                    self.logger.error(message)
-                    raise ValueError(message)
-
+                if item.code is self._model.clients:
+                    raise ValueError(
+                        f"Can't add existing Client with code: '{item.code}'"
+                    )
                 self._model.add_client(item)
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
+
         self.populate_active_tab()
 
     def on_update_button_clicked(self, item: General) -> None:
@@ -98,14 +103,16 @@ class DryCleaningController:
             case 0:
                 pass
             case 1:
-                pass
-            case 2:
-                if not item.code in self._model.clients:
-                    message = (
+                if not item.code in self._model.service_types:
+                    raise ValueError(
                         f"Update failed. Client with code: '{item.code}' doesn't exist"
                     )
-                    self.logger.error(message)
-                    raise ValueError(message)
+                self._model.service_types[item.code] = item
+            case 2:
+                if not item.code in self._model.clients:
+                    raise ValueError(
+                        f"Update failed. Client with code: '{item.code}' doesn't exist"
+                    )
                 self._model.clients[item.code] = item
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
@@ -133,12 +140,10 @@ class DryCleaningController:
         active_tab = self._view.tabs.widget(active_tab_index)
         code = active_tab.get_code_value(row_index)
         if code is None:
-            self.logger.info(
-                "Failed to get entity code. row_index: %s, active_tab_index: %s",
-                row_index,
-                active_tab_index,
+            raise ValueError(
+                f"Failed to get entity code. row_index: {row_index}, "
+                + f"active_tab_index: {active_tab_index}"
             )
-            return
 
         match active_tab_index:
             case 0:

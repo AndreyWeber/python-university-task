@@ -1,3 +1,4 @@
+# import os
 import sys
 import logging
 
@@ -10,8 +11,11 @@ from models.dry_cleaning import DryCleaning
 from views.dry_cleaning_view import DryCleaningView
 from controllers.dry_cleaning_controller import DryCleaningController
 
+# os.environ["QT_DEBUG_PLUGINS"] = "1"
+
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s]: %(filename)s, line %(lineno)d - %(message)s",
 )
 
 

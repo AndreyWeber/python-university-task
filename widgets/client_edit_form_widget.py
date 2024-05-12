@@ -1,4 +1,3 @@
-import logging
 import copy
 from typing import Optional
 
@@ -14,8 +13,6 @@ from entities.client import Client
 
 class ClientEditFormWidget(BaseEditFormWidget):
     def __init__(self) -> None:
-        self.logger = logging.getLogger(__name__)
-
         self._client: Optional[Client] = None
         self.labels = {
             "Name": True,
@@ -30,15 +27,13 @@ class ClientEditFormWidget(BaseEditFormWidget):
         # Create and add control widgets
         self.control_widgets = {}
         for label, required in self.labels.items():
+            widget = QLineEdit()
             match label:
                 case "Name":
-                    widget = QLineEdit()
                     widget.setPlaceholderText("Enter client name (mandatory)")
                 case "Surname":
-                    widget = QLineEdit()
                     widget.setPlaceholderText("Enter client surname (mandatory)")
                 case "Second Name":
-                    widget = QLineEdit()
                     widget.setPlaceholderText("Enter client second name (mandatory)")
                 case "Is Regular":
                     widget = QCheckBox()
@@ -70,10 +65,8 @@ class ClientEditFormWidget(BaseEditFormWidget):
             second_name=self.control_widgets["Second Name"].text(),
             is_regular=self.control_widgets["Is Regular"].isChecked(),
         )
-        try:
-            self.add_button_signal.emit(client)
-        except ValueError as e:
-            QMessageBox.critical(self, "Failed to add Client", e)
+
+        self.add_button_signal.emit(client)
 
     def on_update_button_clicked(self) -> None:
         if self._client is None:
