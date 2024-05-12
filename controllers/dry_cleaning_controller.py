@@ -80,10 +80,10 @@ class DryCleaningController:
                 pass
             case 2:
                 if not item.code is None:
-                    self.logger.warning(
-                        "Can't add existing Client with code: '%s'", item.code
-                    )
-                    return
+                    message = f"Can't add existing Client with code: '{item.code}'"
+                    self.logger.error(message)
+                    raise ValueError(message)
+
                 self._model.add_client(item)
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
@@ -101,10 +101,11 @@ class DryCleaningController:
                 pass
             case 2:
                 if not item.code in self._model.clients:
-                    self.logger.error(
-                        "Update failed. Client with code: '%s' doesn't exist", item.code
+                    message = (
+                        f"Update failed. Client with code: '{item.code}' doesn't exist"
                     )
-                    return
+                    self.logger.error(message)
+                    raise ValueError(message)
                 self._model.clients[item.code] = item
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
