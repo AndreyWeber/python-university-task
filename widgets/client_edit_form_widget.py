@@ -1,6 +1,7 @@
 import logging
 import copy
 from typing import Optional
+
 # pylint: disable=no-name-in-module
 from PyQt5.QtWidgets import (
     QLineEdit,
@@ -20,7 +21,7 @@ class ClientEditFormWidget(BaseEditFormWidget):
             "Name": True,
             "Surname": True,
             "Second Name": True,
-            "Is Regular" : False,
+            "Is Regular": False,
         }
         super().__init__()
 
@@ -30,16 +31,21 @@ class ClientEditFormWidget(BaseEditFormWidget):
         self.control_widgets = {}
         for label, required in self.labels.items():
             match label:
-                case "Name" | "Surname" | "Second Name":
+                case "Name":
                     widget = QLineEdit()
+                    widget.setPlaceholderText("Enter client name (mandatory)")
+                case "Surname":
+                    widget = QLineEdit()
+                    widget.setPlaceholderText("Enter client surname (mandatory)")
+                case "Second Name":
+                    widget = QLineEdit()
+                    widget.setPlaceholderText("Enter client second name (mandatory)")
                 case "Is Regular":
                     widget = QCheckBox()
                 case _:
                     raise ValueError(f"Invalid Client edit label: {label}")
 
-            self.form_layout.addRow(
-                f"{label}: *" if required else label, widget
-            )
+            self.form_layout.addRow(f"{label}: *" if required else label, widget)
             self.control_widgets[label] = widget
 
     def populate_edit_controls(self, item: Client) -> None:
@@ -58,11 +64,11 @@ class ClientEditFormWidget(BaseEditFormWidget):
 
         self._client = None
         client = Client(
-            code = None,
-            name = self.control_widgets["Name"].text(),
-            surname = self.control_widgets["Surname"].text(),
-            second_name = self.control_widgets["Second Name"].text(),
-            is_regular = self.control_widgets["Is Regular"].isChecked()
+            code=None,
+            name=self.control_widgets["Name"].text(),
+            surname=self.control_widgets["Surname"].text(),
+            second_name=self.control_widgets["Second Name"].text(),
+            is_regular=self.control_widgets["Is Regular"].isChecked(),
         )
         try:
             self.add_button_signal.emit(client)
@@ -71,7 +77,9 @@ class ClientEditFormWidget(BaseEditFormWidget):
 
     def on_update_button_clicked(self) -> None:
         if self._client is None:
-            QMessageBox.warning(self, "Failed to update Client", "Client is not selected")
+            QMessageBox.warning(
+                self, "Failed to update Client", "Client is not selected"
+            )
             return
 
         validation_message = self.validate_control_values()
@@ -95,7 +103,9 @@ class ClientEditFormWidget(BaseEditFormWidget):
 
     def on_delete_button_clicked(self) -> None:
         if self._client is None or self._client.code is None:
-            QMessageBox.warning(self, "Failed to delete Client", "Client is not selected")
+            QMessageBox.warning(
+                self, "Failed to delete Client", "Client is not selected"
+            )
             return
 
         self.delete_button_signal.emit(self._client.code)
@@ -109,9 +119,11 @@ class ClientEditFormWidget(BaseEditFormWidget):
                 continue
             message = f"'{label}' value cannot be empty"
             value = self.control_widgets[label].text().strip()
+
             def append_message() -> None:
                 if value is None or value == "":
-                        message_parts.append(message)
+                    message_parts.append(message)
+
             match label:
                 case "Name" | "Surname" | "Second Name":
                     append_message()

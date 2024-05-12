@@ -24,12 +24,16 @@ class ServiceTypeEditFormWidget(BaseEditFormWidget):
             match label:
                 case "Name":
                     widget = QLineEdit()
+                    widget.setPlaceholderText("Enter service name (mandatory)")
                 case "Type":
                     widget = QLineEdit()
+                    widget.setPlaceholderText("Enter service type (mandatory)")
                 case "Price":
                     #! TODO: Check if there is a more suitable control
                     widget = QLineEdit()
-                    widget.setText("0")
+                    widget.setPlaceholderText(
+                        "Enter service price (mandatory). From 1.00 to 100 000.00"
+                    )
                 case _:
                     raise ValueError(f"Invalid ServiceType edit label: {label}")
 
