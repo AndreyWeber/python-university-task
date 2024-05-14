@@ -76,3 +76,7 @@ class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     @abstractmethod
     def populate_edit_controls(self, item: General) -> None:
         pass
+
+    @abstractmethod
+    def clear_edit_controls(self) -> None:
+        pass

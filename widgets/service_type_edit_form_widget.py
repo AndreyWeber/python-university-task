@@ -55,6 +55,12 @@ class ServiceTypeEditFormWidget(BaseEditFormWidget):
         self.control_widgets["Type"].setText(item.type)
         self.control_widgets["Price"].setText(str(item.price))
 
+    def clear_edit_controls(self) -> None:
+        self._service_type = None
+        self.control_widgets["Name"].setText("")
+        self.control_widgets["Type"].setText("")
+        self.control_widgets["Price"].setText("1")
+
     def on_add_button_clicked(self) -> None:
         validation_message = self.validate_control_values()
         if not validation_message is None:
@@ -94,10 +100,7 @@ class ServiceTypeEditFormWidget(BaseEditFormWidget):
         self.update_button_signal.emit(self._service_type)
 
     def on_clear_button_clicked(self) -> None:
-        self._service_type = None
-        self.control_widgets["Name"].setText("")
-        self.control_widgets["Type"].setText("")
-        self.control_widgets["Price"].setText("1")
+        self.clear_edit_controls()
 
     def on_delete_button_clicked(self) -> None:
         if self._service_type is None or self._service_type.code is None:

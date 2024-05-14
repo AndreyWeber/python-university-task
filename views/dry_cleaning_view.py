@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import pyqtSignal
 
+from widgets.base_tab_widget import BaseTabWidget
 from widgets.service_tab_widget import ServiceTabWidget
 from widgets.service_type_tab_widget import ServiceTypeTabWidget
 from widgets.client_tab_widget import ClientTabWidget
@@ -63,6 +64,10 @@ class DryCleaningView(QMainWindow):
             return
         self._active_tab_index = value
         self.tab_changed_signal.emit()
+
+    @property
+    def active_tab_widget(self) -> BaseTabWidget:
+        return self.tabs.widget(self.active_tab_index)
 
     def create_menu_bar(self) -> None:
         menu_bar = QMenuBar(self)

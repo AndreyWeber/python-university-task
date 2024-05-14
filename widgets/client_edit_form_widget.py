@@ -51,6 +51,13 @@ class ClientEditFormWidget(BaseEditFormWidget):
         self.control_widgets["Second Name"].setText(item.second_name)
         self.control_widgets["Is Regular"].setChecked(item.is_regular)
 
+    def clear_edit_controls(self) -> None:
+        self._client = None
+        self.control_widgets["Name"].setText("")
+        self.control_widgets["Surname"].setText("")
+        self.control_widgets["Second Name"].setText("")
+        self.control_widgets["Is Regular"].setChecked(False)
+
     def on_add_button_clicked(self) -> None:
         validation_message = self.validate_control_values()
         if not validation_message is None:
@@ -88,11 +95,7 @@ class ClientEditFormWidget(BaseEditFormWidget):
         self.update_button_signal.emit(self._client)
 
     def on_clear_button_clicked(self) -> None:
-        self._client = None
-        self.control_widgets["Name"].setText("")
-        self.control_widgets["Surname"].setText("")
-        self.control_widgets["Second Name"].setText("")
-        self.control_widgets["Is Regular"].setChecked(False)
+        self.clear_edit_controls()
 
     def on_delete_button_clicked(self) -> None:
         if self._client is None or self._client.code is None:

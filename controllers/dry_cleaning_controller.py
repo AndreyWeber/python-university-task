@@ -38,9 +38,9 @@ class DryCleaningController:
 
     def connect_tab_widget_signals(self) -> None:
         # Connect table widget signals to slots
-        active_tab_index = self._view.active_tab_index
-        table_widget = self._view.tabs.widget(active_tab_index).table_widget
-        edit_form_widget = self._view.tabs.widget(active_tab_index).edit_form_widget
+        active_tab_widget = self._view.active_tab_widget
+        table_widget = active_tab_widget.table_widget
+        edit_form_widget = active_tab_widget.edit_form_widget
 
         # Table widget signals
         self.disconnect_signal_gracefully(table_widget.table_cell_clicked_signal)
@@ -69,53 +69,63 @@ class DryCleaningController:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
 
         # Populate table widgets
-        self._view.tabs.widget(active_tab_index).populate_table(items)
+        self._view.active_tab_widget.populate_table(items)
+
+    def clear_active_tab_edit_controls(self) -> None:
+        self._view.active_tab_widget.clear_edit_controls()
 
     def on_add_button_clicked(self, item: General) -> None:
         active_tab_index = self._view.active_tab_index
-
+        active_tab_widget = self._view.active_tab_widget
         match active_tab_index:
             case 0:
                 pass
             case 1:
                 if item.code in self._model.service_types:
-                    raise ValueError(
+                    active_tab_widget.show_warning_message_signal.emit(
                         f"Can't add existing Service Type with code: '{item.code}'"
                     )
+                    return
                 self._model.add_service_type(item)
             case 2:
-                if item.code is self._model.clients:
-                    raise ValueError(
+                if item.code in self._model.clients:
+                    active_tab_widget.show_warning_message_signal.emit(
                         f"Can't add existing Client with code: '{item.code}'"
                     )
+                    return
                 self._model.add_client(item)
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
 
         self.populate_active_tab()
+        self.clear_active_tab_edit_controls()
 
     def on_update_button_clicked(self, item: General) -> None:
         if item.code is None:
             raise ValueError("'item' argument cannot be None")
 
         active_tab_index = self._view.active_tab_index
+        active_tab_widget = self._view.active_tab_widget
         match active_tab_index:
             case 0:
                 pass
             case 1:
                 if not item.code in self._model.service_types:
-                    raise ValueError(
+                    active_tab_widget.show_warning_message_signal.emit(
                         f"Update failed. Client with code: '{item.code}' doesn't exist"
                     )
+                    return
                 self._model.service_types[item.code] = item
             case 2:
                 if not item.code in self._model.clients:
-                    raise ValueError(
+                    active_tab_widget.show_warning_message_signal.emit(
                         f"Update failed. Client with code: '{item.code}' doesn't exist"
                     )
+                    return
                 self._model.clients[item.code] = item
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
+
         self.populate_active_tab()
 
     def on_delete_button_clicked(self, code: int) -> None:
@@ -129,7 +139,9 @@ class DryCleaningController:
                 self._model.remove_client_by_code(code)
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
+
         self.populate_active_tab()
+        self.clear_active_tab_edit_controls()
 
     def on_cell_clicked(self, cell_index) -> None:
         row_index = cell_index.row()
@@ -137,8 +149,8 @@ class DryCleaningController:
 
     def on_row_header_clicked(self, row_index) -> None:
         active_tab_index = self._view.active_tab_index
-        active_tab = self._view.tabs.widget(active_tab_index)
-        code = active_tab.get_code_value(row_index)
+        active_tab_widget = self._view.active_tab_widget
+        code = active_tab_widget.get_code_value(row_index)
         if code is None:
             raise ValueError(
                 f"Failed to get entity code. row_index: {row_index}, "
@@ -155,7 +167,7 @@ class DryCleaningController:
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
 
-        active_tab.populate_edit_controls(item)
+        active_tab_widget.populate_edit_controls(item)
 
     def disconnect_signal_gracefully(self, signal) -> None:
         try:

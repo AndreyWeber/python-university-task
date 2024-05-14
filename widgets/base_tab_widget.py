@@ -4,6 +4,7 @@ from abc import ABC
 from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
+    QMessageBox,
 )
 from PyQt5.QtCore import pyqtSignal
 
@@ -16,7 +17,9 @@ from entities.general import General
 
 class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     populate_table_widget_signal = pyqtSignal(GeneralDict)
-    populate_edit_controls_widget = pyqtSignal(General)
+    populate_edit_controls_widget_signal = pyqtSignal(General)
+    clear_edit_controls_widget_signal = pyqtSignal()
+    show_warning_message_signal = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -28,9 +31,13 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
         self.layout = QVBoxLayout(self)
 
         self.populate_table_widget_signal.connect(self.table_widget.populate_table)
-        self.populate_edit_controls_widget.connect(
+        self.populate_edit_controls_widget_signal.connect(
             self.edit_form_widget.populate_edit_controls
         )
+        self.clear_edit_controls_widget_signal.connect(
+            self.edit_form_widget.clear_edit_controls
+        )
+        self.show_warning_message_signal.connect(self.show_warning_message_box)
 
         self.layout.addWidget(self.table_widget)
         self.layout.addWidget(self.edit_form_widget)
@@ -43,7 +50,15 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     def populate_edit_controls(self, item: General) -> None:
         if not item:
             return
-        self.populate_edit_controls_widget.emit(item)
+        self.populate_edit_controls_widget_signal.emit(item)
+
+    def clear_edit_controls(self) -> None:
+        self.clear_edit_controls_widget_signal.emit()
+
+    def show_warning_message_box(self, message: str) -> None:
+        if message is None or message.strip() == "":
+            raise ValueError("'message' cannot be None or empty string")
+        QMessageBox.warning(self, "Warning!", message)
 
     def get_code_value(self, row_index: int) -> int:
         return self.table_widget.get_code_value(row_index)
