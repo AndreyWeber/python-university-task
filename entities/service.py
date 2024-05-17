@@ -14,8 +14,9 @@ class Service(General):
     discount_factor: float = 0.97
 
     service_type: Optional[ServiceType] = None
-    items_count: int = 0
     client: Optional[Client] = None
+
+    items_count: int = 0
     date_received: Optional[datetime] = None
     date_returned: Optional[datetime] = None
 

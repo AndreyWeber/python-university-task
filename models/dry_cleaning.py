@@ -60,3 +60,13 @@ class DryCleaning:
             raise ValueError(f"Service with code: {code} is already finalized")
 
         service_to_finalize.finalize_service()
+
+    def remove_service_type_from_services_by_code(self, code: int) -> None:
+        for service in self.services.values():
+            if not service.service_type is None and service.service_type.code == code:
+                service.service_type = None
+
+    def remove_client_from_services_by_code(self, code: int) -> None:
+        for service in self.services.values():
+            if not service.client is None and service.client.code == code:
+                service.client = None

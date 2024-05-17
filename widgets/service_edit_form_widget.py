@@ -5,7 +5,6 @@ from typing import Optional, Dict
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import (
     QPushButton,
-    QLineEdit,
     QComboBox,
     QSpinBox,
 )
@@ -24,7 +23,6 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         self._clients: dict = {}
         self.labels = {
             "Service Name": True,
-            "Service Type": True,
             "Client": True,
             "Items Count": True,
         }
@@ -37,9 +35,6 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         for label, required in self.labels.items():
             match label:
                 case "Service Name":
-                    widget = QLineEdit()
-                    widget.setPlaceholderText("Entel service name (mandatory)")
-                case "Service Type":
                     widget = QComboBox()
                 case "Client":
                     widget = QComboBox()
@@ -65,38 +60,26 @@ class ServiceEditFormWidget(BaseEditFormWidget):
     def populate_edit_controls(
         self, item: Service, kwargs: Dict[str, GeneralDict]
     ) -> None:
-        self.control_widgets["Service Name"].setText(item.service_type.name)
         self.control_widgets["Items Count"].setValue(item.items_count)
         self.populate_combobox(
-            self.control_widgets["Service Type"],
+            self.control_widgets["Service Name"],
             kwargs,
             "service_types",
-            item.service_type.code,
+            None if item.service_type is None else item.service_type.code,
         )
         self.populate_combobox(
-            self.control_widgets["Client"], kwargs, "clients", item.client.code
+            self.control_widgets["Client"],
+            kwargs,
+            "clients",
+            None if item.client is None else item.client.code,
         )
         #! TODO: Add buttons disabling and showing a warning
 
-    def populate_combobox(
-        self, combobox: QComboBox, items: dict, name: str, selected_code: int
-    ) -> None:
-        def combobox_data_to_dict(cbox: QComboBox) -> dict:
-            return {cbox.itemText(i): cbox.itemData(i) for i in range(cbox.count())}
-
-        combobox_new_data = {
-            str(item): code for code, item in items.get(name, {}).items()
-        }
-        if combobox_data_to_dict(combobox) != combobox_new_data:
-            combobox.clear()
-            for text, data in combobox_new_data.items():
-                combobox.addItem(text, data)
-
-        current_idx = combobox.findData(selected_code)
-        combobox.setCurrentIndex(current_idx)
-
     def clear_edit_controls(self) -> None:
         self._service = None
+        self.control_widgets["Service Name"].clear()
+        self.control_widgets["Client"].clear()
+        self.control_widgets["Items Count"].setValue(1)
 
     def on_add_button_clicked(self) -> None:
         pass
@@ -109,3 +92,22 @@ class ServiceEditFormWidget(BaseEditFormWidget):
 
     def on_delete_button_clicked(self) -> None:
         pass
+
+    #! TODO: Adde default value with placeholder
+    def populate_combobox(
+        self, combobox: QComboBox, items: dict, name: str, selected_code: int | None
+    ) -> None:
+        def combobox_data_to_dict(cbox: QComboBox) -> dict:
+            return {cbox.itemText(i): cbox.itemData(i) for i in range(cbox.count())}
+
+        combobox_new_data = {
+            str(item): code for code, item in items.get(name, {}).items()
+        }
+        if combobox_data_to_dict(combobox) != combobox_new_data:
+            combobox.clear()
+            for text, data in combobox_new_data.items():
+                combobox.addItem(text, data)
+
+        if not selected_code is None:
+            current_idx = combobox.findData(selected_code)
+            combobox.setCurrentIndex(current_idx)

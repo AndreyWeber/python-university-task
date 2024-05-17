@@ -61,6 +61,9 @@ class DryCleaningController:
         match active_tab_index:
             case 0:
                 items = self._model.services
+                # Cleanup Service tab edit controls on open, because ServiceTypes and/or
+                # Clients collections could be edited while tab is inactive
+                self.clear_active_tab_edit_controls()
             case 1:
                 items = self._model.service_types
             case 2:
@@ -135,8 +138,10 @@ class DryCleaningController:
                 self._model.remove_service_by_code(code)
             case 1:
                 self._model.remove_service_type_by_code(code)
+                self._model.remove_service_type_from_services_by_code(code)
             case 2:
                 self._model.remove_client_by_code(code)
+                self._model.remove_client_from_services_by_code(code)
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
 

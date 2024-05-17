@@ -15,4 +15,4 @@ class ServiceType(General):
     price: int = field(default_factory=lambda: ServiceType.default_price)
 
     def __str__(self) -> str:
-        return f"{self.type}: {self.name}"
+        return f"{self.name} ({self.type})"

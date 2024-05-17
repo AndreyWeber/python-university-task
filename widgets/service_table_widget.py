@@ -1,3 +1,5 @@
+import logging
+
 # pylint: disable=no-name-in-module
 from PyQt5.QtWidgets import QTableWidgetItem
 from widgets.base_table_widget import BaseTableWidget
@@ -6,6 +8,8 @@ from entities.service_dict import ServiceDict
 
 class ServiceTableWidget(BaseTableWidget):
     def __init__(self):
+        self.logger = logging.getLogger(__name__)
+
         headers = [
             "Code",
             "Service Name",
@@ -24,11 +28,31 @@ class ServiceTableWidget(BaseTableWidget):
 
         for row, service in enumerate(values):
             self.table.setItem(row, 0, QTableWidgetItem(str(service.code)))
-            self.table.setItem(row, 1, QTableWidgetItem(service.service_type.name))
-            self.table.setItem(row, 2, QTableWidgetItem(service.service_type.type))
-            self.table.setItem(row, 3, QTableWidgetItem(str(service.client)))
+            self.table.setItem(
+                row,
+                1,
+                QTableWidgetItem(
+                    "N/A" if service.service_type is None else service.service_type.name
+                ),
+            )
+            self.table.setItem(
+                row,
+                2,
+                QTableWidgetItem(
+                    "N/A" if service.service_type is None else service.service_type.type
+                ),
+            )
+            self.table.setItem(
+                row,
+                3,
+                QTableWidgetItem(
+                    "N/A" if service.client is None else str(service.client)
+                ),
+            )
             self.table.setItem(row, 4, QTableWidgetItem(str(service.items_count)))
-            self.table.setItem(row, 5, QTableWidgetItem(str(service.calculate_cost())))
+            self.table.setItem(
+                row, 5, QTableWidgetItem(str(self.try_get_service_cost(service)))
+            )
             self.table.setItem(
                 row, 6, QTableWidgetItem(service.date_received.strftime("%d.%m.%Y"))
             )
@@ -41,3 +65,10 @@ class ServiceTableWidget(BaseTableWidget):
                     else ""
                 ),
             )
+
+    def try_get_service_cost(self, service) -> float:
+        try:
+            return service.calculate_cost()
+        except ValueError as e:
+            self.logger.error("Failed to calculate Service Price: '%s'", e)
+            return 0.0
