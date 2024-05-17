@@ -68,7 +68,7 @@ class DryCleaningController:
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
 
-        # Populate table widgets
+        # Populate table widget
         self._view.active_tab_widget.populate_table(items)
 
     def clear_active_tab_edit_controls(self) -> None:
@@ -159,15 +159,21 @@ class DryCleaningController:
 
         match active_tab_index:
             case 0:
-                item = self._model.services.get(code, None)
+                active_tab_widget.populate_edit_controls(
+                    self._model.services.get(code, None),
+                    clients=self._model.clients,
+                    service_types=self._model.service_types,
+                )
             case 1:
-                item = self._model.service_types.get(code, None)
+                active_tab_widget.populate_edit_controls(
+                    self._model.service_types.get(code, None)
+                )
             case 2:
-                item = self._model.clients.get(code, None)
+                active_tab_widget.populate_edit_controls(
+                    self._model.clients.get(code, None)
+                )
             case _:
                 raise ValueError(f"Invalid active tab index: {active_tab_index}")
-
-        active_tab_widget.populate_edit_controls(item)
 
     def disconnect_signal_gracefully(self, signal) -> None:
         try:

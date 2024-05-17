@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Dict
 
 # pylint: disable=no-name-in-module
 from PyQt5.QtCore import pyqtSignal
@@ -12,6 +13,7 @@ from PyQt5.QtWidgets import (
 )
 from widgets.meta_qwidget_abc import MetaQWidgetABC
 from entities.general import General
+from entities.general_dict import GeneralDict
 
 
 class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
@@ -73,8 +75,12 @@ class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     def on_delete_button_clicked(self) -> None:
         pass
 
+    #! TODO: Add proper docstring
+    # kwargs defined explicitly as Dictp[str, Any] because we can't pass **kwargs via Qt signal
     @abstractmethod
-    def populate_edit_controls(self, item: General) -> None:
+    def populate_edit_controls(
+        self, item: General, kwargs: Dict[str, GeneralDict]
+    ) -> None:
         pass
 
     @abstractmethod

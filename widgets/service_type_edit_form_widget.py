@@ -1,5 +1,5 @@
 import copy
-from typing import Optional, Any
+from typing import Optional, Dict, Any
 
 # pylint: disable=no-name-in-module
 from PyQt5.QtWidgets import (
@@ -10,6 +10,7 @@ from PyQt5.QtGui import QIntValidator
 
 from widgets.base_edit_form_widget import BaseEditFormWidget
 from entities.service_type import ServiceType
+from entities.general_dict import GeneralDict
 
 
 class ServiceTypeEditFormWidget(BaseEditFormWidget):
@@ -48,7 +49,9 @@ class ServiceTypeEditFormWidget(BaseEditFormWidget):
             self.form_layout.addRow(f"{label}: *" if required else label, widget)
             self.control_widgets[label] = widget
 
-    def populate_edit_controls(self, item: ServiceType) -> None:
+    def populate_edit_controls(
+        self, item: ServiceType, kwargs: Dict[str, GeneralDict]
+    ) -> None:
         # Copy ServiceType to remove Model ServiceTypetDict item reference
         self._service_type = copy.deepcopy(item)
         self.control_widgets["Name"].setText(item.name)

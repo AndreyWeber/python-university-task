@@ -15,5 +15,5 @@ class ServiceTabWidget(BaseTabWidget):
     def populate_table(self, items: ServiceDict) -> None:
         super().populate_table(items)
 
-    def populate_edit_controls(self, item: Service) -> None:
-        super().populate_edit_controls(item)
+    def populate_edit_controls(self, item: Service, **kwargs) -> None:
+        super().populate_edit_controls(item, **kwargs)

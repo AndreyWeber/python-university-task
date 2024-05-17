@@ -29,7 +29,7 @@ def global_exception_hook(exctype, value, traceback):
     sys.exit(1)
 
 
-def main():
+def main() -> None:
     sys.excepthook = global_exception_hook
 
     app = QApplication(sys.argv)

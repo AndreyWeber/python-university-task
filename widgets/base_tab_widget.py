@@ -17,7 +17,7 @@ from entities.general import General
 
 class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     populate_table_widget_signal = pyqtSignal(GeneralDict)
-    populate_edit_controls_widget_signal = pyqtSignal(General)
+    populate_edit_controls_widget_signal = pyqtSignal(General, dict)
     clear_edit_controls_widget_signal = pyqtSignal()
     show_warning_message_signal = pyqtSignal(str)
 
@@ -47,10 +47,10 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
             return
         self.populate_table_widget_signal.emit(items)
 
-    def populate_edit_controls(self, item: General) -> None:
+    def populate_edit_controls(self, item: General, **kwargs) -> None:
         if not item:
             return
-        self.populate_edit_controls_widget_signal.emit(item)
+        self.populate_edit_controls_widget_signal.emit(item, kwargs)
 
     def clear_edit_controls(self) -> None:
         self.clear_edit_controls_widget_signal.emit()
