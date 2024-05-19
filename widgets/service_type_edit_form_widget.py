@@ -49,9 +49,10 @@ class ServiceTypeEditFormWidget(BaseEditFormWidget):
             self.form_layout.addRow(f"{label}: *" if required else label, widget)
             self.control_widgets[label] = widget
 
-    def populate_edit_controls(
-        self, item: ServiceType, kwargs: Dict[str, GeneralDict]
-    ) -> None:
+    def pre_populate_edit_controls(self, kwargs: Dict[str, GeneralDict]) -> None:
+        pass
+
+    def populate_edit_controls(self, item: ServiceType) -> None:
         # Copy ServiceType to remove Model ServiceTypetDict item reference
         self._service_type = copy.deepcopy(item)
         self.control_widgets["Name"].setText(item.name)

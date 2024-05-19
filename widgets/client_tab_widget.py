@@ -15,5 +15,5 @@ class ClientTabWidget(BaseTabWidget):
     def populate_table(self, items: ClientDict) -> None:
         return super().populate_table(items)
 
-    def populate_edit_controls(self, item: Client) -> None:
-        return super().populate_edit_controls(item)
+    def populate_edit_controls(self, item: Client, **kwargs) -> None:
+        return super().populate_edit_controls(item, **kwargs)

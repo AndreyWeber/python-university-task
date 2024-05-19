@@ -17,7 +17,8 @@ from entities.general import General
 
 class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     populate_table_widget_signal = pyqtSignal(GeneralDict)
-    populate_edit_controls_widget_signal = pyqtSignal(General, dict)
+    pre_populate_edit_controls_widget_signal = pyqtSignal(dict)
+    populate_edit_controls_widget_signal = pyqtSignal(General)
     clear_edit_controls_widget_signal = pyqtSignal()
     show_warning_message_signal = pyqtSignal(str)
 
@@ -31,6 +32,9 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
         self.layout = QVBoxLayout(self)
 
         self.populate_table_widget_signal.connect(self.table_widget.populate_table)
+        self.pre_populate_edit_controls_widget_signal.connect(
+            self.edit_form_widget.pre_populate_edit_controls
+        )
         self.populate_edit_controls_widget_signal.connect(
             self.edit_form_widget.populate_edit_controls
         )
@@ -47,10 +51,13 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
             return
         self.populate_table_widget_signal.emit(items)
 
-    def populate_edit_controls(self, item: General, **kwargs) -> None:
+    def pre_populate_edit_controls(self, **kwargs) -> None:
+        self.pre_populate_edit_controls_widget_signal.emit(kwargs)
+
+    def populate_edit_controls(self, item: General) -> None:
         if not item:
             return
-        self.populate_edit_controls_widget_signal.emit(item, kwargs)
+        self.populate_edit_controls_widget_signal.emit(item)
 
     def clear_edit_controls(self) -> None:
         self.clear_edit_controls_widget_signal.emit()
@@ -60,5 +67,5 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
             raise ValueError("'message' cannot be None or empty string")
         QMessageBox.warning(self, "Warning!", message)
 
-    def get_code_value(self, row_index: int) -> int:
-        return self.table_widget.get_code_value(row_index)
+    def get_table_widget_item_code_value(self, row_index: int) -> int:
+        return self.table_widget.get_item_code_value(row_index)

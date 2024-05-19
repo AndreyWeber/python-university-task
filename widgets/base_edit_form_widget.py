@@ -78,9 +78,11 @@ class BaseEditFormWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     #! TODO: Add proper docstring
     # kwargs defined explicitly as Dictp[str, Any] because we can't pass **kwargs via Qt signal
     @abstractmethod
-    def populate_edit_controls(
-        self, item: General, kwargs: Dict[str, GeneralDict]
-    ) -> None:
+    def pre_populate_edit_controls(self, kwargs: Dict[str, GeneralDict]) -> None:
+        pass
+
+    @abstractmethod
+    def populate_edit_controls(self, item: General) -> None:
         pass
 
     @abstractmethod

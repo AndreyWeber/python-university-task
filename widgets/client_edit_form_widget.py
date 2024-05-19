@@ -44,9 +44,10 @@ class ClientEditFormWidget(BaseEditFormWidget):
             self.form_layout.addRow(f"{label}: *" if required else label, widget)
             self.control_widgets[label] = widget
 
-    def populate_edit_controls(
-        self, item: Client, kwargs: Dict[str, GeneralDict]
-    ) -> None:
+    def pre_populate_edit_controls(self, kwargs: Dict[str, GeneralDict]) -> None:
+        pass
+
+    def populate_edit_controls(self, item: Client) -> None:
         # Copy Client to remove Model ClientDict item reference
         self._client = copy.deepcopy(item)
         self.control_widgets["Name"].setText(item.name)

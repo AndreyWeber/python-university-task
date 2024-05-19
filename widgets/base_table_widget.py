@@ -39,7 +39,7 @@ class BaseTableWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     def populate_table(self, items_dict: GeneralDict) -> None:
         pass
 
-    def get_code_value(self, row_index: int) -> int | None:
+    def get_item_code_value(self, row_index: int) -> int | None:
         if row_index < 0 or row_index >= self.table.rowCount():
             return None
 
