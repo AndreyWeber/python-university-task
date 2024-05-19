@@ -68,9 +68,7 @@ class ServiceTypeEditFormWidget(BaseEditFormWidget):
     def on_add_button_clicked(self) -> None:
         validation_message = self.validate_control_values()
         if not validation_message is None:
-            QMessageBox.warning(
-                self, "Failes to update ServiceType", validation_message
-            )
+            QMessageBox.warning(self, "Failed to add Service Type", validation_message)
             return
 
         self._service_type = None

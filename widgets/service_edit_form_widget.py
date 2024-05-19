@@ -8,10 +8,13 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QComboBox,
     QSpinBox,
+    QMessageBox,
 )
 from widgets.base_edit_form_widget import BaseEditFormWidget
 from widgets.gray_out_delegate import GrayOutDelegate
 from entities.service import Service
+from entities.client import Client
+from entities.service_type import ServiceType
 from entities.general_dict import GeneralDict
 
 
@@ -45,6 +48,7 @@ class ServiceEditFormWidget(BaseEditFormWidget):
                 case "Items Count":
                     widget = QSpinBox()
                     widget.setMinimum(1)
+                    widget.setMaximum(100)
                 case _:
                     raise ValueError(f"Invalid Service edit label: {label}")
 
@@ -97,7 +101,25 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         self.control_widgets["Items Count"].setValue(1)
 
     def on_add_button_clicked(self) -> None:
-        pass
+        validation_message = self.validate_control_values()
+        if not validation_message is None:
+            QMessageBox.warning(self, "Failed to add Service", validation_message)
+            return
+
+        client_code = self.control_widgets["Client"].currentData()
+        service_type_code = self.control_widgets["Service Name"].currentData()
+
+        self._service = None
+        service = Service(
+            code=None,
+            date_received=None,
+            date_returned=None,
+            items_count=self.control_widgets["Items Count"].value(),
+            client=Client(code=client_code),
+            service_type=ServiceType(code=service_type_code),
+        )
+
+        self.add_button_signal.emit(service)
 
     def on_update_button_clicked(self) -> None:
         pass
@@ -152,3 +174,16 @@ class ServiceEditFormWidget(BaseEditFormWidget):
             )
         else:
             combobox.setCurrentIndex(idx_to_set)
+
+    def validate_control_values(self) -> str | None:
+        message_parts = []
+        for label, required in self.labels.items():
+            if not required:
+                continue
+            if label != "Service Name" and label != "Client":
+                continue
+            data = self.control_widgets[label].currentData()
+            if data == sys.maxsize:
+                message_parts.append(f"Please select '{label}' non-default value")
+
+        return "\n".join(message_parts) if len(message_parts) > 0 else None

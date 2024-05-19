@@ -54,7 +54,13 @@ class ServiceTableWidget(BaseTableWidget):
                 row, 5, QTableWidgetItem(str(self.try_get_service_cost(service)))
             )
             self.table.setItem(
-                row, 6, QTableWidgetItem(service.date_received.strftime("%d.%m.%Y"))
+                row,
+                6,
+                QTableWidgetItem(
+                    service.date_received.strftime("%d.%m.%Y")
+                    if service.date_received
+                    else "N/A"
+                ),
             )
             self.table.setItem(
                 row,
@@ -62,7 +68,7 @@ class ServiceTableWidget(BaseTableWidget):
                 QTableWidgetItem(
                     service.date_returned.strftime("%d.%m.%Y")
                     if service.date_returned
-                    else ""
+                    else "N/A"
                 ),
             )
 
