@@ -127,7 +127,14 @@ class DryCleaningController:
         active_tab_widget = self._view.active_tab_widget
         match active_tab_index:
             case 0:
-                pass
+                if not item.code in self._model.services:
+                    active_tab_widget.show_warning_message_signal.emit(
+                        f"Update failed. Service with code: '{item.code}' doesn't exist"
+                    )
+                    return
+                item.client = self._model.clients[item.client.code]
+                item.service_type = self._model.service_types[item.service_type.code]
+                self._model.services[item.code] = item
             case 1:
                 if not item.code in self._model.service_types:
                     active_tab_widget.show_warning_message_signal.emit(

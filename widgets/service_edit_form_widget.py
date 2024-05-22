@@ -1,3 +1,4 @@
+import copy
 import logging
 import sys
 from typing import Optional, Dict
@@ -26,8 +27,6 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         self.logger = logging.getLogger(__name__)
 
         self._service: Optional[Service] = None
-        self._service_types: dict = {}
-        self._clients: dict = {}
         self.labels = {
             "Service Name": True,
             "Client": True,
@@ -80,6 +79,7 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         )
 
     def populate_edit_controls(self, item: Service) -> None:
+        self._service = copy.deepcopy(item)
         self.control_widgets["Items Count"].setValue(item.items_count)
         self.set_combobox_selected_or_default_item(
             self.control_widgets["Service Name"],
@@ -122,13 +122,37 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         self.add_button_signal.emit(service)
 
     def on_update_button_clicked(self) -> None:
-        pass
+        if self._service is None:
+            QMessageBox.warning(
+                self, "Failed to update Service", "Service is not selected"
+            )
+            return
+
+        validation_message = self.validate_control_values()
+        if not validation_message is None:
+            QMessageBox.warning(self, "Failed to update Service", validation_message)
+            return
+
+        client_code = self.control_widgets["Client"].currentData()
+        service_type_code = self.control_widgets["Service Name"].currentData()
+
+        self._service.client = Client(code=client_code)
+        self._service.service_type = ServiceType(code=service_type_code)
+        self._service.items_count = self.control_widgets["Items Count"].value()
+
+        self.update_button_signal.emit(self._service)
 
     def on_clear_button_clicked(self) -> None:
         self.clear_edit_controls()
 
     def on_delete_button_clicked(self) -> None:
-        pass
+        if self._service is None or self._service.code is None:
+            QMessageBox.warning(
+                self, "Failed to delete Service", "Service is not selected"
+            )
+            return
+
+        self.delete_button_signal.emit(self._service.code)
 
     #! TODO: Add default value with placeholder
     def populate_combobox(
