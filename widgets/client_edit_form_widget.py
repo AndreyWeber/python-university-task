@@ -55,6 +55,9 @@ class ClientEditFormWidget(BaseEditFormWidget):
         self.control_widgets["Second Name"].setText(item.second_name)
         self.control_widgets["Is Regular"].setChecked(item.is_regular)
 
+    def set_enabled_edit_controls(self) -> None:
+        pass
+
     def clear_edit_controls(self) -> None:
         self._client = None
         self.control_widgets["Name"].setText("")

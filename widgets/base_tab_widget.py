@@ -19,6 +19,7 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     populate_table_widget_signal = pyqtSignal(GeneralDict)
     pre_populate_edit_controls_widget_signal = pyqtSignal(dict)
     populate_edit_controls_widget_signal = pyqtSignal(General)
+    set_enabled_edit_controls_widget_signal = pyqtSignal()
     clear_edit_controls_widget_signal = pyqtSignal()
     show_warning_message_signal = pyqtSignal(str)
 
@@ -37,6 +38,9 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
         )
         self.populate_edit_controls_widget_signal.connect(
             self.edit_form_widget.populate_edit_controls
+        )
+        self.set_enabled_edit_controls_widget_signal.connect(
+            self.edit_form_widget.set_enabled_edit_controls
         )
         self.clear_edit_controls_widget_signal.connect(
             self.edit_form_widget.clear_edit_controls
@@ -58,6 +62,9 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
         if not item:
             return
         self.populate_edit_controls_widget_signal.emit(item)
+
+    def set_enabled_edit_controls(self) -> None:
+        self.set_enabled_edit_controls_widget_signal.emit()
 
     def clear_edit_controls(self) -> None:
         self.clear_edit_controls_widget_signal.emit()

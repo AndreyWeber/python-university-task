@@ -1,16 +1,23 @@
-<p>
-pip install PyQt5<br>
-pip install PyQt5-stubs<br>
-pip install lxml
-</p>
-<p>
+## Dependencies
+
+> Was written using __Python 3.10.9__
+
+- `pip install PyQt5`
+- `pip install PyQt5-stubs`
+- `pip install lxml` - _perhaps not needed_
+
+## Progress
+
 Top Menu "File" -> "Load XML"<br>
-Other Top Menu actions not active yet<br>
-</p>
-<p>
-    <ul>
-        <li><b>Services</b> tab - not implemented yet</li>
-        <li><b>Service Types</b> tab - not implemented yet</li>
-        <li><b>Clients</b> tab - implemented</li>
-    </ul>
-</p>
+Other Top Menu actions not active yet
+
+- __Services__ tab - _implemented_
+- __Service Types__ tab - _implemented_
+- __Clients__ tab - _implemented_
+
+## Developer's Notes
+DryCleaningController -> __active_tab_widget.populate_edit_controls()__ -> (Name)TabWidget -> populate_edit_controls_widget_signal.emit(item, kwargs)
+
+BaseTabWidget -> populate_edit_controls_widget_signal.connect(edit_form_widget.populate_edit_controls)
+
+(Name)EditFormWidget -> populate_edit_controls()

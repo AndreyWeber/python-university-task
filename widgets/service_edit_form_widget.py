@@ -20,8 +20,8 @@ from entities.general_dict import GeneralDict
 
 
 class ServiceEditFormWidget(BaseEditFormWidget):
-    receive_button_signal = pyqtSignal()
-    return_button_signal = pyqtSignal()
+    receive_button_signal = pyqtSignal(int)
+    return_button_signal = pyqtSignal(int)
 
     def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
@@ -58,8 +58,9 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         self.receive_button = QPushButton("Receive Item(s)")
         self.return_button = QPushButton("Return Item(s)")
 
-        self.receive_button.clicked.connect(self.receive_button_signal.emit)
-        self.return_button.clicked.connect(self.return_button_signal.emit)
+        # Connect buttons to their respective signals
+        self.receive_button.clicked.connect(self.on_receive_button_clicked)
+        self.return_button.clicked.connect(self.on_return_button_clicked)
 
         self.buttons_layout.addWidget(self.receive_button)
         self.buttons_layout.addWidget(self.return_button)
@@ -90,7 +91,12 @@ class ServiceEditFormWidget(BaseEditFormWidget):
             None if item.client is None else item.client.code,
         )
 
-    #! TODO: Add buttons disabling and showing a warning
+    def set_enabled_edit_controls(self) -> None:
+        self.receive_button.setEnabled(self._service.date_received is None)
+        self.return_button.setEnabled(
+            self._service.date_returned is None
+            and not self._service.date_received is None
+        )
 
     def clear_edit_controls(self) -> None:
         self._service = None
@@ -154,7 +160,29 @@ class ServiceEditFormWidget(BaseEditFormWidget):
 
         self.delete_button_signal.emit(self._service.code)
 
-    #! TODO: Add default value with placeholder
+    # Service tab specific buttons
+    def on_receive_button_clicked(self) -> None:
+        if self._service is None or self._service.code is None:
+            QMessageBox.warning(
+                self,
+                "Failed to receive item(s) from the client",
+                "Service is not selected",
+            )
+            return
+
+        self.receive_button_signal.emit(self._service.code)
+
+    def on_return_button_clicked(self) -> None:
+        if self._service is None or self._service.code is None:
+            QMessageBox.warning(
+                self,
+                "Failed to return item(s) to the client",
+                "Service is not selected",
+            )
+            return
+
+        self.return_button_signal.emit(self._service.code)
+
     def populate_combobox(
         self,
         combobox: QComboBox,
@@ -191,7 +219,7 @@ class ServiceEditFormWidget(BaseEditFormWidget):
         )
         # Set combobox item if index was found or log message if not
         if idx_to_set == -1:
-            logging.info(
+            logging.error(
                 "Failed to select item by code '%s' for combobox '%s'",
                 selected_code,
                 combobox,

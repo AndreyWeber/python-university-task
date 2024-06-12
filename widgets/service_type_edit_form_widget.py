@@ -59,6 +59,9 @@ class ServiceTypeEditFormWidget(BaseEditFormWidget):
         self.control_widgets["Type"].setText(item.type)
         self.control_widgets["Price"].setText(str(item.price))
 
+    def set_enabled_edit_controls(self) -> None:
+        pass
+
     def clear_edit_controls(self) -> None:
         self._service_type = None
         self.control_widgets["Name"].setText("")
