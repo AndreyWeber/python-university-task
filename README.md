@@ -8,9 +8,12 @@
 
 ## Progress
 
-Top Menu "File" -> "Load XML"<br>
-Other Top Menu actions not active yet
+### Top Menu "File":
+- __Load/Save XML__ - _implemented_
+- __Load/Save JSON__ - _implemented_
+- __Load/Save SQLite__ - _not implemented_
 
+### Tabs
 - __Services__ tab - _implemented_
 - __Service Types__ tab - _implemented_
 - __Clients__ tab - _implemented_
