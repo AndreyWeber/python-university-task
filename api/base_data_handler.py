@@ -29,6 +29,8 @@ class BaseDataHandler(ABC):
         - `write_data(destination, data)`: Writes data to the specified destination.
     """
 
+    date_format: str = "%d.%m.%Y"
+
     def __init__(
         self, data_source: DryCleaning = None, input_val: str = "", output_val: str = ""
     ) -> None:

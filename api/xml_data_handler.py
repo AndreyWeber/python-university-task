@@ -8,7 +8,6 @@ from entities.service import Service
 
 
 class XmlDataHandler(BaseDataHandler):
-    DATE_FORMAT = "%d.%m.%Y"
 
     def read(self) -> None:
         if not os.path.exists(self.input):
@@ -51,10 +50,10 @@ class XmlDataHandler(BaseDataHandler):
                         ),
                         items_count=int(service_element.get("itemsCount")),
                         date_received=datetime.strptime(
-                            service_element.get("dateReceived"), self.DATE_FORMAT
+                            service_element.get("dateReceived"), self.date_format
                         ),
                         date_returned=datetime.strptime(
-                            service_element.get("dateReturned"), self.DATE_FORMAT
+                            service_element.get("dateReturned"), self.date_format
                         ),
                     )
                 )
@@ -86,10 +85,10 @@ class XmlDataHandler(BaseDataHandler):
             service_element.set("client", str(service.client.code))
             service_element.set("itemsCount", str(service.items_count))
             service_element.set(
-                "dateReceived", service.date_received.strftime(self.DATE_FORMAT)
+                "dateReceived", service.date_received.strftime(self.date_format)
             )
             service_element.set(
-                "dateReturned", service.date_returned.strftime(self.DATE_FORMAT)
+                "dateReturned", service.date_returned.strftime(self.date_format)
             )
 
         tree = etree.ElementTree(root)

@@ -7,6 +7,7 @@ from views.dry_cleaning_view import DryCleaningView
 from models.dry_cleaning import DryCleaning
 from api.base_data_handler import BaseDataHandler
 from api.xml_data_handler import XmlDataHandler
+from api.json_data_handler import JsonDataHandler
 
 
 class DryCleaningController:
@@ -26,14 +27,27 @@ class DryCleaningController:
 
         self._model: DryCleaning = model
         self._view: DryCleaningView = view
-        self._data_handler: BaseDataHandler = None
+        self._data_handlers: dict[str, BaseDataHandler] = {
+            "xml_data_handler": XmlDataHandler(
+                self._model,
+                str(Path(".\\oldfile.xml").resolve()),
+                str(Path(".\\newfile.xml").resolve()),
+            ),
+            "json_data_handler": JsonDataHandler(
+                self._model,
+                str(Path(".\\oldfile.json").resolve()),
+                str(Path(".\\newfile.json").resolve()),
+            ),
+        }
 
         # Connect signals to slots
 
         # Top menu signals
         self._view.load_xml_data_signal.connect(self.load_xml_data)
+        self._view.load_json_data_signal.connect(self.load_json_data)
         self._view.load_sqlite_data_signal.connect(self.load_sqlite_data)
         self._view.save_xml_data_signal.connect(self.save_xml_data)
+        self._view.save_json_data_signal.connect(self.save_json_data)
         self._view.save_sqlite_data_signal.connect(self.save_sqlite_data)
 
         # Tabs and tab widgets signals
@@ -253,12 +267,12 @@ class DryCleaningController:
     # Top menu action handlers
     #
     def load_xml_data(self):
-        self._data_handler = XmlDataHandler(
-            self._model,
-            str(Path(".\\oldfile.xml").resolve()),
-            str(Path(".\\newfile.xml").resolve()),
-        )
-        self._data_handler.read()
+        self._data_handlers["xml_data_handler"].read()
+        self.populate_active_tab_table()
+        self.pre_populate_active_tab_edit_controls()
+
+    def load_json_data(self):
+        self._data_handlers["json_data_handler"].read()
         self.populate_active_tab_table()
         self.pre_populate_active_tab_edit_controls()
 
@@ -266,8 +280,14 @@ class DryCleaningController:
         raise NotImplementedError("'load_sqlite_data()' not implemented")
 
     def save_xml_data(self):
-        if not self._data_handler is None:
-            self._data_handler.write()
+        data_handler = self._data_handlers["xml_data_handler"]
+        if not data_handler is None:
+            data_handler.write()
+
+    def save_json_data(self):
+        data_handler = self._data_handlers["json_data_handler"]
+        if not data_handler is None:
+            data_handler.write()
 
     def save_sqlite_data(self):
         raise NotImplementedError("'save_sqlite_data()' not implemented")

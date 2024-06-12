@@ -17,8 +17,10 @@ from widgets.client_tab_widget import ClientTabWidget
 
 class DryCleaningView(QMainWindow):
     load_xml_data_signal = pyqtSignal()
+    load_json_data_signal = pyqtSignal()
     load_sqlite_data_signal = pyqtSignal()
     save_xml_data_signal = pyqtSignal()
+    save_json_data_signal = pyqtSignal()
     save_sqlite_data_signal = pyqtSignal()
     tab_changed_signal = pyqtSignal()
 
@@ -75,19 +77,25 @@ class DryCleaningView(QMainWindow):
         file_menu = menu_bar.addMenu("File")
 
         load_xml_action = QAction("Load XML", self)
+        load_json_action = QAction("Load JSON", self)
         load_sqlite_action = QAction("Load SQLite", self)
         save_xml_action = QAction("Save XML", self)
+        save_json_action = QAction("Save JSON", self)
         save_sqlite_action = QAction("Save SQLite", self)
 
         load_xml_action.triggered.connect(self.load_xml_data_signal.emit)
+        load_json_action.triggered.connect(self.load_json_data_signal.emit)
         load_sqlite_action.triggered.connect(self.load_sqlite_data_signal.emit)
         save_xml_action.triggered.connect(self.save_xml_data_signal.emit)
+        save_json_action.triggered.connect(self.save_json_data_signal.emit)
         save_sqlite_action.triggered.connect(self.save_sqlite_data_signal.emit)
 
         file_menu.addAction(load_xml_action)
+        file_menu.addAction(load_json_action)
         file_menu.addAction(load_sqlite_action)
         file_menu.addSeparator()
         file_menu.addAction(save_xml_action)
+        file_menu.addAction(save_json_action)
         file_menu.addAction(save_sqlite_action)
 
         self.setMenuBar(menu_bar)

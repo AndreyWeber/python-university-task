@@ -1,0 +1,71 @@
+{
+    "clients": [
+        {
+            "code": 1,
+            "name": "Иван",
+            "surname": "Иванов",
+            "second_name": "Иванович",
+            "is_regular": true
+        },
+        {
+            "code": 2,
+            "name": "Артем",
+            "surname": "Смирнов",
+            "second_name": "Артемович",
+            "is_regular": false
+        },
+        {
+            "code": 3,
+            "name": "Петр",
+            "surname": "Петров",
+            "second_name": "Петрович",
+            "is_regular": true
+        }
+    ],
+    "service_types": [
+        {
+            "code": 1,
+            "name": "Химчистка костюма",
+            "type": "Чистка текстильных изделий",
+            "price": 1000
+        },
+        {
+            "code": 2,
+            "name": "Химчистка матраса",
+            "type": "Чистка мягкой мебели",
+            "price": 1500
+        },
+        {
+            "code": 3,
+            "name": "Химчистка коврового покрытия",
+            "type": "Чистка предметов интерьера",
+            "price": 900
+        }
+    ],
+    "services": [
+        {
+            "code": 1,
+            "service_type": 1,
+            "client": 1,
+            "items_count": 2,
+            "date_received": "10.03.2022",
+            "date_returned": "18.03.2022"
+        },
+        {
+            "code": 2,
+            "service_type": 2,
+            "client": 2,
+            "items_count": 1,
+            "date_received": "23.03.2022",
+            "date_returned": "30.03.2022"
+        },
+        {
+            "code": 3,
+            "service_type": 3,
+            "client": 3,
+            "items_count": 1,
+            "date_received": "14.04.2022",
+            "date_returned": "21.04.2022"
+        }
+    ]
+}
