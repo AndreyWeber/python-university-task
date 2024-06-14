@@ -14,14 +14,12 @@ from widgets.service_tab_widget import ServiceTabWidget
 from widgets.service_type_tab_widget import ServiceTypeTabWidget
 from widgets.client_tab_widget import ClientTabWidget
 
+from api.handler_type import HandlerType
+
 
 class DryCleaningView(QMainWindow):
-    load_xml_data_signal = pyqtSignal()
-    load_json_data_signal = pyqtSignal()
-    load_sqlite_data_signal = pyqtSignal()
-    save_xml_data_signal = pyqtSignal()
-    save_json_data_signal = pyqtSignal()
-    save_sqlite_data_signal = pyqtSignal()
+    load_data_signal = pyqtSignal(HandlerType)
+    save_data_signal = pyqtSignal(HandlerType)
     tab_changed_signal = pyqtSignal()
 
     default_tab_index: int = 0
@@ -83,12 +81,24 @@ class DryCleaningView(QMainWindow):
         save_json_action = QAction("Save JSON", self)
         save_sqlite_action = QAction("Save SQLite", self)
 
-        load_xml_action.triggered.connect(self.load_xml_data_signal.emit)
-        load_json_action.triggered.connect(self.load_json_data_signal.emit)
-        load_sqlite_action.triggered.connect(self.load_sqlite_data_signal.emit)
-        save_xml_action.triggered.connect(self.save_xml_data_signal.emit)
-        save_json_action.triggered.connect(self.save_json_data_signal.emit)
-        save_sqlite_action.triggered.connect(self.save_sqlite_data_signal.emit)
+        load_xml_action.triggered.connect(
+            lambda: self.load_data_signal.emit(HandlerType.XML)
+        )
+        load_json_action.triggered.connect(
+            lambda: self.load_data_signal.emit(HandlerType.JSON)
+        )
+        load_sqlite_action.triggered.connect(
+            lambda: self.load_data_signal.emit(HandlerType.SQLITE)
+        )
+        save_xml_action.triggered.connect(
+            lambda: self.save_data_signal.emit(HandlerType.XML)
+        )
+        save_json_action.triggered.connect(
+            lambda: self.save_data_signal.emit(HandlerType.JSON)
+        )
+        save_sqlite_action.triggered.connect(
+            lambda: self.save_data_signal.emit(HandlerType.SQLITE)
+        )
 
         file_menu.addAction(load_xml_action)
         file_menu.addAction(load_json_action)

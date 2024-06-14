@@ -9,6 +9,7 @@ from api.base_data_handler import BaseDataHandler
 from api.xml_data_handler import XmlDataHandler
 from api.json_data_handler import JsonDataHandler
 from api.sqlite_data_handler import SqliteDataHandler
+from api.handler_type import HandlerType
 
 
 class DryCleaningController:
@@ -28,18 +29,18 @@ class DryCleaningController:
 
         self._model: DryCleaning = model
         self._view: DryCleaningView = view
-        self._data_handlers: dict[str, BaseDataHandler] = {
-            "xml_data_handler": XmlDataHandler(
+        self._data_handlers: dict[HandlerType, BaseDataHandler] = {
+            HandlerType.XML: XmlDataHandler(
                 self._model,
                 str(Path(".\\oldfile.xml").resolve()),
                 str(Path(".\\newfile.xml").resolve()),
             ),
-            "json_data_handler": JsonDataHandler(
+            HandlerType.JSON: JsonDataHandler(
                 self._model,
                 str(Path(".\\oldfile.json").resolve()),
                 str(Path(".\\newfile.json").resolve()),
             ),
-            "sqlite_data_handler": SqliteDataHandler(
+            HandlerType.SQLITE: SqliteDataHandler(
                 self._model,
                 str(Path(".\\oldSqlite.db").resolve()),
                 str(Path(".\\newSqlite.db").resolve()),
@@ -49,12 +50,8 @@ class DryCleaningController:
         # Connect signals to slots
 
         # Top menu signals
-        self._view.load_xml_data_signal.connect(self.load_xml_data)
-        self._view.load_json_data_signal.connect(self.load_json_data)
-        self._view.load_sqlite_data_signal.connect(self.load_sqlite_data)
-        self._view.save_xml_data_signal.connect(self.save_xml_data)
-        self._view.save_json_data_signal.connect(self.save_json_data)
-        self._view.save_sqlite_data_signal.connect(self.save_sqlite_data)
+        self._view.load_data_signal.connect(self.load_data)
+        self._view.save_data_signal.connect(self.save_data)
 
         # Tabs and tab widgets signals
         self._view.tab_changed_signal.connect(self.on_tab_change)
@@ -272,33 +269,13 @@ class DryCleaningController:
     #
     # Top menu action handlers
     #
-    def load_xml_data(self):
-        self._data_handlers["xml_data_handler"].read()
+    def load_data(self, handler_type: HandlerType) -> None:
+        self._data_handlers[handler_type].read()
         self.populate_active_tab_table()
         self.pre_populate_active_tab_edit_controls()
 
-    def load_json_data(self):
-        self._data_handlers["json_data_handler"].read()
-        self.populate_active_tab_table()
-        self.pre_populate_active_tab_edit_controls()
-
-    def load_sqlite_data(self):
-        self._data_handlers["sqlite_data_handler"].read()
-        self.populate_active_tab_table()
-        self.pre_populate_active_tab_edit_controls()
-
-    def save_xml_data(self):
-        data_handler = self._data_handlers["xml_data_handler"]
-        if not data_handler is None:
-            data_handler.write()
-
-    def save_json_data(self):
-        data_handler = self._data_handlers["json_data_handler"]
-        if not data_handler is None:
-            data_handler.write()
-
-    def save_sqlite_data(self):
-        data_handler = self._data_handlers["sqlite_data_handler"]
+    def save_data(self, handler_type: HandlerType) -> None:
+        data_handler = self._data_handlers[handler_type]
         if not data_handler is None:
             data_handler.write()
 
