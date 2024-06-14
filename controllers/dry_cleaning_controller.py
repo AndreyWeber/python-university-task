@@ -8,6 +8,7 @@ from models.dry_cleaning import DryCleaning
 from api.base_data_handler import BaseDataHandler
 from api.xml_data_handler import XmlDataHandler
 from api.json_data_handler import JsonDataHandler
+from api.sqlite_data_handler import SqliteDataHandler
 
 
 class DryCleaningController:
@@ -37,6 +38,11 @@ class DryCleaningController:
                 self._model,
                 str(Path(".\\oldfile.json").resolve()),
                 str(Path(".\\newfile.json").resolve()),
+            ),
+            "sqlite_data_handler": SqliteDataHandler(
+                self._model,
+                str(Path(".\\oldSqlite.db").resolve()),
+                str(Path(".\\newSqlite.db").resolve()),
             ),
         }
 
@@ -277,7 +283,9 @@ class DryCleaningController:
         self.pre_populate_active_tab_edit_controls()
 
     def load_sqlite_data(self):
-        raise NotImplementedError("'load_sqlite_data()' not implemented")
+        self._data_handlers["sqlite_data_handler"].read()
+        self.populate_active_tab_table()
+        self.pre_populate_active_tab_edit_controls()
 
     def save_xml_data(self):
         data_handler = self._data_handlers["xml_data_handler"]
@@ -290,7 +298,9 @@ class DryCleaningController:
             data_handler.write()
 
     def save_sqlite_data(self):
-        raise NotImplementedError("'save_sqlite_data()' not implemented")
+        data_handler = self._data_handlers["sqlite_data_handler"]
+        if not data_handler is None:
+            data_handler.write()
 
 
 # class DryCleaningView(QMainWindow):

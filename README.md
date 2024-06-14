@@ -8,10 +8,12 @@
 
 ## Progress
 
+> All main functions implemented
+
 ### Top Menu "File":
 - __Load/Save XML__ - _implemented_
 - __Load/Save JSON__ - _implemented_
-- __Load/Save SQLite__ - _not implemented_
+- __Load/Save SQLite__ - _implemented_
 
 ### Tabs
 - __Services__ tab - _implemented_
