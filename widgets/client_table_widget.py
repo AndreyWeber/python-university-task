@@ -25,3 +25,5 @@ class ClientTableWidget(BaseTableWidget):
             self.table.setItem(row, 2, QTableWidgetItem(client.surname))
             self.table.setItem(row, 3, QTableWidgetItem(client.second_name))
             self.table.setItem(row, 4, QTableWidgetItem(str(client.is_regular)))
+
+        super().populate_table(items_dict)

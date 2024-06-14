@@ -72,6 +72,8 @@ class ServiceTableWidget(BaseTableWidget):
                 ),
             )
 
+        super().populate_table(items_dict)
+
     def try_get_service_cost(self, service) -> float:
         try:
             return service.calculate_cost()

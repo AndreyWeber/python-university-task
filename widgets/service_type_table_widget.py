@@ -23,3 +23,5 @@ class ServiceTypeTableWidget(BaseTableWidget):
             self.table.setItem(row, 1, QTableWidgetItem(service_type.name))
             self.table.setItem(row, 2, QTableWidgetItem(service_type.type))
             self.table.setItem(row, 3, QTableWidgetItem(str(service_type.price)))
+
+        super().populate_table(items_dict)
