@@ -1,6 +1,18 @@
+## Description
+
+This is a university assignment. The objective of this task is to develop a simple application for managing a dry cleaning business. The application should:
+
+1. Have a user interface developed using the PyQt library.
+2. Be developed based on an object-oriented approach.
+3. Implement the MVC (Model-View-Controller) design pattern.
+
+### Main application window
+
+![main_form](https://github.com/AndreyWeber/python-university-task/assets/3620403/97865c1d-65ac-4145-a2ea-8e54cb24a259)
+
 ## Dependencies
 
-> Was written using __Python 3.10.9__
+> Developed using __Python 3.10.9__
 
 - `pip install PyQt5`
 - `pip install PyQt5-stubs`
