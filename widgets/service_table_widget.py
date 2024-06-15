@@ -1,13 +1,16 @@
 import logging
 
 # pylint: disable=no-name-in-module
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import (
+    QTableWidgetItem,
+    QMainWindow,
+)
 from widgets.base_table_widget import BaseTableWidget
 from entities.service_dict import ServiceDict
 
 
 class ServiceTableWidget(BaseTableWidget):
-    def __init__(self):
+    def __init__(self, parent_window: QMainWindow):
         self.logger = logging.getLogger(__name__)
 
         headers = [
@@ -20,7 +23,7 @@ class ServiceTableWidget(BaseTableWidget):
             "Date Received",
             "Date Returned",
         ]
-        super().__init__(headers)
+        super().__init__(headers, parent_window)
 
     def populate_table(self, items_dict: ServiceDict) -> None:
         values = items_dict.values()

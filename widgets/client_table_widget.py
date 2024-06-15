@@ -1,11 +1,14 @@
 # pylint: disable=no-name-in-module
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import (
+    QTableWidgetItem,
+    QMainWindow,
+)
 from widgets.base_table_widget import BaseTableWidget
 from entities.client_dict import ClientDict
 
 
 class ClientTableWidget(BaseTableWidget):
-    def __init__(self):
+    def __init__(self, parent_window: QMainWindow):
         headers = [
             "Code",
             "Name",
@@ -13,7 +16,7 @@ class ClientTableWidget(BaseTableWidget):
             "Second Name",
             "Is Regular",
         ]
-        super().__init__(headers)
+        super().__init__(headers, parent_window)
 
     def populate_table(self, items_dict: ClientDict) -> None:
         values = items_dict.values()

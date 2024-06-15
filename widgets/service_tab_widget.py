@@ -7,7 +7,7 @@ from entities.service import Service
 
 class ServiceTabWidget(BaseTabWidget):
     def initUI(self):
-        self.table_widget = ServiceTableWidget()
+        self.table_widget = ServiceTableWidget(self._parent_window)
         self.edit_form_widget = ServiceEditFormWidget()
 
         super().initUI()

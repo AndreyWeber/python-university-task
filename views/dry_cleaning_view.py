@@ -21,17 +21,19 @@ class DryCleaningView(QMainWindow):
     load_data_signal = pyqtSignal(HandlerType)
     save_data_signal = pyqtSignal(HandlerType)
     tab_changed_signal = pyqtSignal()
+    window_width_changed_signal = pyqtSignal(int)
 
     default_tab_index: int = 0
 
     def __init__(self):
         super().__init__()
+        self._max_window_width = 1100
         self._active_tab_index = self.default_tab_index
         self.initUI()
 
     def initUI(self) -> None:
         self.setWindowTitle("Dry Cleaning Management")
-        self.setGeometry(100, 100, 1100, 600)
+        self.setGeometry(100, 100, self._max_window_width, 650)
 
         # Central widget and main layout
         central_widget = QWidget(self)
@@ -43,12 +45,14 @@ class DryCleaningView(QMainWindow):
         # Tabs setup
         self.tabs = QTabWidget()
 
-        self.tabs.addTab(ServiceTabWidget(), "Services")
-        self.tabs.addTab(ServiceTypeTabWidget(), "Service Types")
-        self.tabs.addTab(ClientTabWidget(), "Clients")
+        self.tabs.addTab(ServiceTabWidget(self), "Services")
+        self.tabs.addTab(ServiceTypeTabWidget(self), "Service Types")
+        self.tabs.addTab(ClientTabWidget(self), "Clients")
 
-        # Connect the tab change signal
+        # Connect the tab changed signal
         self.tabs.currentChanged.connect(self.on_tab_change)
+        # Connect the width changed signal
+        self.window_width_changed_signal.connect(self.on_window_width_changed)
 
         main_layout.addWidget(self.tabs)
 
@@ -112,3 +116,9 @@ class DryCleaningView(QMainWindow):
 
     def on_tab_change(self, index: int) -> None:
         self.active_tab_index = index
+
+    def on_window_width_changed(self, width: int) -> None:
+        height = self.geometry().height()
+        if width > self._max_window_width:
+            self._max_window_width = width
+        self.setGeometry(100, 100, self._max_window_width, height)

@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QTableWidget,
+    QMainWindow,
 )
 from widgets.meta_qwidget_abc import MetaQWidgetABC
 from entities.general_dict import GeneralDict
@@ -16,17 +17,18 @@ class BaseTableWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     table_cell_clicked_signal = pyqtSignal(object)
     table_row_header_clicked_signal = pyqtSignal(int)
 
-    def __init__(self, headers: List[str]) -> None:
+    def __init__(self, headers: List[str], parent_window: QMainWindow) -> None:
         super().__init__()
-        self.headers = headers
+        self._headers = headers
+        self._parent_window = parent_window
         self.initUI()
 
     def initUI(self) -> None:
         self.layout = QVBoxLayout(self)
 
         self.table = QTableWidget(self)
-        self.table.setColumnCount(len(self.headers))
-        self.table.setHorizontalHeaderLabels(self.headers)
+        self.table.setColumnCount(len(self._headers))
+        self.table.setHorizontalHeaderLabels(self._headers)
 
         self.table.clicked.connect(self.table_cell_clicked_signal.emit)
         self.table.verticalHeader().sectionClicked.connect(
@@ -38,7 +40,7 @@ class BaseTableWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     @abstractmethod
     def populate_table(self, items_dict: GeneralDict) -> None:
         self.adjust_columns_size()
-        # self.adjust_window_size()
+        self.adjust_window_size()
 
     def get_item_code_value(self, row_index: int) -> int | None:
         if row_index < 0 or row_index >= self.table.rowCount():
@@ -55,13 +57,23 @@ class BaseTableWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
             margined_width = self.table.columnWidth(col) + 8
             self.table.setColumnWidth(col, margined_width)
 
-    # def adjust_window_size(self) -> None:
-    #     width = self.table.verticalHeader().width() + 45
-    #     width += self.table.horizontalHeader().length()
-    #     if self.table.verticalScrollBar().isVisible():
-    #         width += self.table.verticalScrollBar().width()
-    #     width += self.table.frameWidth() * 2
+    def adjust_window_size(self) -> None:
+        width = 0
+        for i in range(self.table.columnCount()):
+            width += self.table.columnWidth(i)
 
-    #     height = self.geometry().height()
+        if self.table.verticalHeader().isVisible():
+            width += self.table.verticalHeader().width()
 
-    #     self.setGeometry(100, 100, width, height)
+        if self.table.verticalScrollBar().isVisible():
+            width += self.table.verticalScrollBar().width()
+
+        width += self.table.frameWidth() * 2
+
+        margins = self.table.contentsMargins()
+        width += margins.left() + margins.right()
+
+        adjustment = 95
+        width += adjustment
+
+        self._parent_window.window_width_changed_signal.emit(width)

@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QMessageBox,
+    QMainWindow,
 )
 from PyQt5.QtCore import pyqtSignal
 
@@ -23,8 +24,11 @@ class BaseTabWidget(QWidget, ABC, metaclass=MetaQWidgetABC):
     clear_edit_controls_widget_signal = pyqtSignal()
     show_warning_message_signal = pyqtSignal(str)
 
-    def __init__(self):
+    def __init__(self, parent_window: QMainWindow):
         super().__init__()
+
+        self._parent_window = parent_window
+
         self.table_widget: BaseTableWidget = None
         self.edit_form_widget: BaseEditFormWidget = None
         self.initUI()

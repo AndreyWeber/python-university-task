@@ -1,18 +1,21 @@
 # pylint: disable=no-name-in-module
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import (
+    QTableWidgetItem,
+    QMainWindow,
+)
 from widgets.base_table_widget import BaseTableWidget
 from entities.service_type_dict import ServiceTypeDict
 
 
 class ServiceTypeTableWidget(BaseTableWidget):
-    def __init__(self):
+    def __init__(self, parent_window: QMainWindow):
         headers = [
             "Code",
             "Name",
             "Type",
             "Price",
         ]
-        super().__init__(headers)
+        super().__init__(headers, parent_window)
 
     def populate_table(self, items_dict: ServiceTypeDict) -> None:
         values = items_dict.values()

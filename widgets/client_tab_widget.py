@@ -7,7 +7,7 @@ from entities.client import Client
 
 class ClientTabWidget(BaseTabWidget):
     def initUI(self):
-        self.table_widget = ClientTableWidget()
+        self.table_widget = ClientTableWidget(self._parent_window)
         self.edit_form_widget = ClientEditFormWidget()
 
         super().initUI()
