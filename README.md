@@ -6,6 +6,10 @@ This is a university assignment. The objective of this task is to develop a simp
 2. Be developed based on an object-oriented approach.
 3. Implement the MVC (Model-View-Controller) design pattern.
 
+### Main application window
+
+![main_form](https://github.com/AndreyWeber/python-university-task/assets/3620403/97865c1d-65ac-4145-a2ea-8e54cb24a259)
+
 ## Dependencies
 
 > Developed using __Python 3.10.9__
